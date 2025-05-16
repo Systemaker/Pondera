@@ -1,5 +1,6 @@
 import { MouseEvent, useRef, useEffect } from 'react';
 import { useEditorCommands } from '@/lib/editor';
+import { Editor } from '@tiptap/react';
 import { 
   Type, Heading2, Heading3, Bold, Italic, 
   ListOrdered, List, MessageSquarePlus, MessageSquareText
@@ -18,6 +19,7 @@ interface EnhancedContextMenuProps {
   onApplyHighlight: (colorClass: string, spanId: string) => void;
   onEditComment: (commentId: string) => void;
   activeNote: Note | null;
+  editor: Editor | null;
 }
 
 export default function EnhancedContextMenu({
@@ -25,13 +27,14 @@ export default function EnhancedContextMenu({
   onAddComment,
   onApplyHighlight,
   onEditComment,
-  activeNote
+  activeNote,
+  editor
 }: EnhancedContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const { notes } = useNotes();
   
   // Get editor commands
-  const { applyFormat, applyHighlightColor, getSelectedText } = useEditorCommands(null);
+  const { applyFormat, applyHighlightColor, getSelectedText } = useEditorCommands(editor);
   
   // Adjust menu position if it goes off screen
   useEffect(() => {

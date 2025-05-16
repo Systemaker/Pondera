@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { EditorContent } from "@tiptap/react";
+import { EditorContent, Editor } from "@tiptap/react";
 import { useNotes } from "@/context/NotesContext";
 import { useCustomEditor } from "@/lib/editor";
 import { Download, FileText } from "lucide-react";
@@ -23,6 +23,13 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
       }
     }
   );
+  
+  // Pass editor reference to parent component if needed
+  useEffect(() => {
+    if (setEditorRef) {
+      setEditorRef(editor);
+    }
+  }, [editor, setEditorRef]);
   
   // Update editor content when active note changes
   useEffect(() => {
@@ -73,8 +80,12 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
       <div className="border-b border-zinc-800 p-4">
         <input
           type="text"
-          value={activeNote.title || ""}
-          onChange={(e) => updateNote(activeNoteId, { title: e.target.value })}
+          value={activeNote?.title || ""}
+          onChange={(e) => {
+            if (activeNoteId) {
+              updateNote(activeNoteId, { title: e.target.value });
+            }
+          }}
           className="w-full bg-transparent border-none text-xl text-gray-100 font-medium focus:outline-none focus:ring-0"
           placeholder="Note Title"
         />

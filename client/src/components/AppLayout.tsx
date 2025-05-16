@@ -101,6 +101,7 @@ export default function AppLayout() {
           onApplyHighlight={handleApplyHighlight}
           onEditComment={handleEditComment}
           activeNote={activeNote}
+          editor={editorRef.current}
         />
       )}
       
