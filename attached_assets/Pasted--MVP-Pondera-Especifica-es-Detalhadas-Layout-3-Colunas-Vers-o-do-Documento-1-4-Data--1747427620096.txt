@@ -1,0 +1,168 @@
+# MVP Pondera: Especificações Detalhadas (Layout 3 Colunas)
+
+**Versão do Documento:** 1.4
+**Data:** 16 de maio de 2025
+**Objetivo:** Guiar o desenvolvimento do MVP (Produto Mínimo Viável) do aplicativo "Pondera", com um layout de três colunas, gerenciamento de múltiplas notas, e foco principal em funcionalidades avançadas de **Anotações (Comentários) e Destaques (Highlights)** em um editor de texto rico.
+
+## 1. Sobre o Aplicativo
+
+* **Nome:** Pondera
+* **O que é:** Uma aplicação web de página única (SPA) minimalista, projetada para anotações e destaques. Com um layout de três colunas, oferece um editor de texto rico onde o usuário pode facilmente criar e interagir com seu conteúdo através de comentários contextuais, categorizados e priorizados, além de múltiplos destaques coloridos.
+* **Principal funcionalidade:** Oferecer um ambiente intuitivo para criar e gerenciar múltiplas notas. O cerne do Pondera é permitir que o usuário **analise e interaja profundamente com seus textos** através de um sistema robusto de **anotações (comentários)** e **destaques (highlights)**. Cada nota possui um editor de texto que automaticamente aplica estilos predefinidos. Uma coluna dedicada exibe os comentários da nota ativa, e as notas podem ser exportadas em formato Markdown.
+* **Público:** Usuários que buscam uma ferramenta elegante e funcional para capturar, formatar, organizar e, principalmente, **ponderar sobre seus textos** através de anotações detalhadas e destaques visuais. Ideal para estudantes, pesquisadores, escritores e qualquer pessoa que pratique leitura ativa e crítica.
+* **Tecnologias:**
+    * **Frontend:** React (versão 18 ou superior, usando Hooks e Componentes Funcionais).
+    * **Editor de Texto:** Biblioteca de editor WYSIWYG robusta (ex: TipTap, Slate.js, ou Quill.js).
+    * **Estilização:** Tailwind CSS (versão 3 ou superior).
+    * **Gerenciamento de Estado:** React Context API para este MVP (ou Zustand/Jotai se a complexidade aumentar muito).
+    * **Armazenamento Local:** `localStorage` do navegador.
+    * **Ícones:** `lucide-react` (ou similar).
+    * **Conversão HTML para Markdown:** Uma biblioteca como `turndown` ou similar para a funcionalidade de download.
+
+## 2. Aparência e Experiência do Usuário (UI/UX)
+
+* **Tema Visual:** Dark Mode "Extremo".
+    * **Fundo Principal da Aplicação e Colunas:** Preto absoluto ou quase preto (ex: `#000000` ou Tailwind `bg-black`).
+    * **Fundo da Área de Edição (Coluna Central):** Preto absoluto ou quase preto (ex: `#0A0A0A` ou Tailwind `bg-gray-950` se um contraste mínimo for desejado, caso contrário, também `bg-black`).
+    * **Texto Principal (Padrão):** Branco ou cinza muito claro (ex: Tailwind `text-slate-100` ou `text-gray-200`).
+    * **Outros Elementos de UI (Modais, Popovers, Itens de Lista):** Fundos muito escuros (ex: Tailwind `bg-gray-900` ou `bg-slate-800`) com texto claro.
+* **Fonte:** Utilizar a fonte "Inter" (sans-serif).
+* **Layout Geral:**
+    * Interface ultra minimalista, dividida em **três colunas verticais**.
+    * **Coluna Esquerda (fixa, largura menor):** Lista de notas, botões de ação.
+    * **Coluna Central (flexível, largura maior):** Área de edição da nota selecionada.
+    * **Coluna Direita (fixa, largura menor):** Lista de comentários da nota selecionada.
+    * **Nenhuma barra de título global.** O foco é no conteúdo.
+* **Cores de Formatação de Texto (Tema Dark):** (H1-Vermelho `#A94442`, H2-Laranja `#D97706`, H3-Verde `#5A8E3C`, H4-Azul fraco `#4A90E2`; Negrito-Amarelo queimado `#B59410`; Itálico-Vermelho rosado `#AD5A79`).
+* **Cores para Prioridades de Comentários:** (Alta-Vermelho, Média-Amarelo, Baixa-Azul).
+* **Cores para Destaques (Highlights):** (Azulado `bg-blue-500/30`, Roxo `bg-purple-500/30`, Rosa `bg-pink-500/30` translúcidos).
+
+## 3. Como os Dados Serão Organizados
+
+A estrutura de dados agora suportará múltiplas notas.
+
+* **Estrutura Principal (armazenada em `localStorage` sob uma chave como `ponderaApp_Data_v1.4`):**
+    ```json
+    {
+      "notes": [ // Array de objeto_nota
+        // ... mais notas aqui
+      ],
+      "active_note_id": "string_id_da_nota_ativa_ou_null"
+    }
+    ```
+* **`objeto_nota`:**
+    * `id`: Identificador único da nota (UUID v4).
+    * `title`: Título da nota (para exibição na lista, pode ser a primeira linha do conteúdo ou definido pelo usuário).
+    * `content_html`: Conteúdo da nota como HTML, gerenciado pelo editor WYSIWYG.
+    * `comments`: Lista de `objeto_comentario` (associados a esta nota).
+    * `highlights`: Lista de `objeto_highlight` (associados a esta nota).
+    * `created_at`: Data/hora ISO da criação.
+    * `updated_at`: Data/hora ISO da última modificação (importante para ordenação).
+    * `is_pinned`: Booleano, indica se a nota está fixada no topo da lista.
+
+* **`objeto_comentario`:**
+    * `id`, `target_span_id`, `text`, `priority`, `category`, `created_at`.
+    * `order_in_document`: (NOVO - Opcional, mas útil) Um número que indica a ordem de aparição do comentário no texto, para facilitar a ordenação na coluna da direita. Pode ser definido ao criar o comentário.
+
+* **`objeto_highlight`:**
+    * `id`, `target_span_id`, `color_class`, `created_at`.
+
+## 4. Funcionalidades Principais
+
+### F0: Layout Principal e Gerenciamento de Múltiplas Notas
+* **Componente Principal:** `AppLayout` (ou similar, gerenciando as 3 colunas).
+* **Coluna Esquerda (`NoteListColumn`):**
+    * Exibe uma lista de todas as notas (`objeto_nota`).
+    * Cada item da lista (`NoteListItem`) deve mostrar:
+        * `title` da nota.
+        * Ícone de "fixo" se `is_pinned` for true.
+        * Data de `updated_at` (formato amigável).
+    * **Ordenação:**
+        * Notas fixadas (`is_pinned: true`) sempre no topo.
+        * Demais notas ordenadas por `updated_at` (mais recentes primeiro).
+    * **Ações por Nota (ex: menu de contexto no item da lista ou botões discretos):**
+        * Fixar/Desafixar Nota.
+        * Excluir Nota (com confirmação).
+        * "Fazer Download como Markdown" (ver F5).
+    * **Botão "Nova Nota":**
+        * Cria um novo `objeto_nota` com título padrão (ex: "Nova Nota"), conteúdo vazio, datas atuais, `is_pinned: false`.
+        * Adiciona à lista `notes`.
+        * Define como `active_note_id`.
+        * Salva no `localStorage`.
+    * **Botão "Configurações":** (Placeholder para este MVP, pode não ter ação ou abrir um modal vazio).
+* **Coluna Central (`EditorColumn`):**
+    * Contém o `RichTextEditorArea` (ver F1).
+    * Exibe o `content_html` da nota cujo `id` corresponde a `active_note_id`.
+    * Se `active_note_id` for `null` ou inválido (ex: após excluir a nota ativa), exibir um placeholder ou a nota mais recente.
+* **Coluna Direita (`CommentListColumn`):**
+    * Exibe uma lista dos `comments` pertencentes à nota ativa (`active_note_id`).
+    * Cada item da lista (`CommentListItem`) deve mostrar:
+        * Um trecho do `comment.text`.
+        * Indicador visual da `comment.priority` (cor).
+        * `comment.category`.
+    * **Ordenação:** Os comentários devem ser listados na ordem em que aparecem no texto da nota (usar `comment.order_in_document` ou analisar a ordem das `<span>`s no `content_html`).
+    * **Interação (Pós-MVP):** Clicar em um comentário na lista pode rolar a visualização da Coluna Central para o trecho comentado correspondente.
+
+### F1: Área de Edição de Texto Avançada (`RichTextEditorArea`)
+* (Funcionalidade e especificações conforme a versão 1.2 do documento, aplicando-se à nota ativa na Coluna Central).
+* **Formatação Automática ao Digitar/Colar:** Cabeçalhos, listas, negrito, itálico com estilos customizados.
+* **Colar Conteúdo:** Manter formatação de origem, com sanitização.
+
+### F2: Menu de Contexto Aprimorado (`EnhancedContextMenu`)
+* (Funcionalidade e especificações conforme a versão 1.2, operando sobre o texto selecionado na Coluna Central).
+* **Seções:** Edição Básica, Comentários, Destaques, com ícones.
+    * "Editar Comentário" habilitado se o texto selecionado já tiver um comentário associado *na nota ativa*.
+
+### F3: Gerenciamento de Comentários (Anotações)
+* (Funcionalidade e especificações conforme a versão 1.2, mas agora os comentários são criados/editados/excluídos dentro do contexto da `active_note_id`).
+* Ao adicionar um comentário, o `order_in_document` deve ser determinado (ex: contando as `<span>` de comentário existentes).
+
+### F4: Gerenciamento de Destaques (Highlights)
+* (Funcionalidade e especificações conforme a versão 1.2, mas agora os destaques são aplicados à `active_note_id`).
+
+### F5: Exportação para Markdown
+* **Gatilho:** Opção no menu de contexto de uma nota na `NoteListColumn` ou um botão dedicado.
+* **Processo:**
+    1.  Pegar o `content_html` da nota selecionada.
+    2.  Usar uma biblioteca (ex: `turndown`) para converter o HTML para Markdown.
+        * Configurar a biblioteca para tentar preservar o máximo de semântica (cabeçalhos, listas, negrito, itálico).
+    3.  **Comentários/Anotações:** Decidir como representar no Markdown:
+        * Opção 1: Como notas de rodapé do Markdown.
+        * Opção 2: Como blocos de citação (`> Comentário: ...`) inseridos após o parágrafo/trecho comentado.
+        * Opção 3 (MVP mais simples): Não incluir comentários/anotações no export de Markdown inicialmente, apenas o texto principal. *Decisão para MVP: Não incluir comentários/anotações na exportação inicial para simplificar.*
+    4.  Iniciar o download de um arquivo `.md` com o nome da nota (ex: `titulo_da_nota.md`).
+
+## 5. Estrutura dos Componentes React (Sugestão)
+
+* **`App.js`**: Gerencia o estado global (`notes`, `active_note_id`), `localStorage`, e renderiza `AppLayout`.
+* **`AppLayout.js`**: Define a estrutura de 3 colunas.
+    * **`NoteListColumn.js`**:
+        * `NoteListItem.js`
+    * **`EditorColumn.js`**:
+        * `RichTextEditorArea.js` (wrapper do editor WYSIWYG)
+    * **`CommentListColumn.js`**:
+        * `CommentListItem.js`
+* **`EnhancedContextMenu.js`**
+* **`CommentFormModal.js`**, **`CommentViewPopover.js`**
+
+## 6. Estilização com Tailwind CSS
+* (Conforme versão 1.2, com foco no tema "Dark Extremo" e cores customizadas para formatação).
+* As colunas terão classes Tailwind para definir suas larguras (fixas e flexíveis) e comportamento de layout.
+
+## 7. Pontos Importantes para a Implementação
+
+* **Gerenciamento de Estado:** Com múltiplas notas e uma nota ativa, o gerenciamento de estado se torna mais complexo. Context API pode ser suficiente, mas Zustand ou Jotai podem simplificar.
+* **Performance da Lista de Notas:** Se houver muitas notas, a renderização da lista precisa ser eficiente.
+* **Sincronização entre Colunas:** Alterações na nota ativa (Coluna Central) devem refletir na lista de comentários (Coluna Direita) e potencialmente na lista de notas (ex: `updated_at`, título).
+* **Conversão HTML <-> Markdown:** Se a ideia de "salvar automaticamente no estilo markdown" significar armazenamento interno em Markdown, a escolha do editor WYSIWYG é ainda mais crítica (precisa suportar bem essa conversão bidirecional). *Para este MVP, o armazenamento interno é HTML, e Markdown é apenas para exportação.*
+
+## 8. O que NÃO FAZER neste MVP (Reiterado)
+
+* Sincronização na nuvem, colaboração, busca global avançada (além de talvez um filtro simples na lista de notas no futuro), exportação para outros formatos além de Markdown.
+* Funcionalidades avançadas de configurações.
+* Remoção de destaques (pode ser um próximo passo simples).
+* Arrastar e soltar para reordenar notas.
+* Edição de título da nota diretamente na lista (pode ser inferido da primeira linha ou um campo simples no futuro).
+* Inclusão de comentários/anotações na exportação Markdown (simplificado para não incluir no MVP).
+
+Esta nova estrutura de três colunas eleva bastante o potencial do aplicativo! A complexidade aumentou, mas as funcionalidades adicionadas são muito valiosas.
