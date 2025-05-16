@@ -6,10 +6,11 @@ import { Download, FileText } from "lucide-react";
 import { countWords } from "@/lib/utils";
 
 interface EditorColumnProps {
-  onContextMenu: (e: React.MouseEvent, selectedText: string | null) => void;
+  onContextMenu: (e: React.MouseEvent, selectedText: string) => void;
+  setEditorRef?: (editor: Editor | null) => void;
 }
 
-export default function EditorColumn({ onContextMenu }: EditorColumnProps) {
+export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColumnProps) {
   const { activeNote, activeNoteId, updateNote, getFormattedDate, exportNoteToMarkdown } = useNotes();
   const [wordCount, setWordCount] = useState(0);
   
@@ -46,7 +47,7 @@ export default function EditorColumn({ onContextMenu }: EditorColumnProps) {
     
     const selection = editor.state.selection;
     const selectedText = selection.empty 
-      ? null 
+      ? "" 
       : editor.state.doc.textBetween(selection.from, selection.to);
     
     onContextMenu(e, selectedText);
@@ -68,6 +69,17 @@ export default function EditorColumn({ onContextMenu }: EditorColumnProps) {
 
   return (
     <div className="flex-1 flex flex-col h-full bg-black overflow-hidden">
+      {/* Title input - separate from content */}
+      <div className="border-b border-zinc-800 p-4">
+        <input
+          type="text"
+          value={activeNote.title || ""}
+          onChange={(e) => updateNote(activeNoteId, { title: e.target.value })}
+          className="w-full bg-transparent border-none text-xl text-gray-100 font-medium focus:outline-none focus:ring-0"
+          placeholder="Note Title"
+        />
+      </div>
+      
       <div 
         className="flex-1 overflow-y-auto p-6"
         onContextMenu={handleEditorContextMenu}

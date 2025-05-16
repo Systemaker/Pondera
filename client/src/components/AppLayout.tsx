@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import NoteListColumn from "./NoteListColumn";
 import EditorColumn from "./EditorColumn";
 import CommentListColumn from "./CommentListColumn";
 import EnhancedContextMenu from "./EnhancedContextMenu";
 import CommentFormModal from "./CommentFormModal";
 import { useNotes } from "@/context/NotesContext";
+import { Editor } from "@tiptap/react";
 
 export default function AppLayout() {
   const { activeNoteId, activeNote, updateNote } = useNotes();
@@ -13,11 +14,12 @@ export default function AppLayout() {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [selectedTextInfo, setSelectedTextInfo] = useState<{ text: string; spanId: string } | null>(null);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
-
+  const editorRef = useRef<Editor | null>(null);
+  
   // Handler for right-click in the editor
-  const handleContextMenu = (e: React.MouseEvent, selectedText: string | null) => {
+  const handleContextMenu = (e: React.MouseEvent, selectedText: string) => {
     e.preventDefault();
-    if (!selectedText) return;
+    if (!selectedText || selectedText.trim() === "") return;
     
     setContextMenuPosition({ x: e.clientX, y: e.clientY });
     setShowContextMenu(true);
@@ -84,7 +86,8 @@ export default function AppLayout() {
       <NoteListColumn />
       
       <EditorColumn 
-        onContextMenu={handleContextMenu} 
+        onContextMenu={handleContextMenu}
+        setEditorRef={(editor) => editorRef.current = editor}
       />
       
       <CommentListColumn 
