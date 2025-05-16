@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --ring: 240 4.9% 83.9%;
+    --radius: 0.5rem;
+
+    /* Custom theme colors */
+    --heading-h1: 0 42% 47%;
+    --heading-h2: 31 92% 44%;
+    --heading-h3: 120 40% 40%;
+    --heading-h4: 213 77% 59%;
+    --text-bold: 46 85% 39%;
+    --text-italic: 336 33% 51%;
+    --priority-high: 0 84% 60%;
+    --priority-medium: 48 96% 53%;
+    --priority-low: 217 91% 60%;
+    --highlight-blue: 217 91% 60% / 0.3;
+    --highlight-purple: 264 67% 66% / 0.3;
+    --highlight-pink: 329 86% 61% / 0.3;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --ring: 240 4.9% 83.9%;
+    --radius: 0.5rem;
+
+    /* Custom theme colors */
+    --heading-h1: 0 42% 47%;
+    --heading-h2: 31 92% 44%;
+    --heading-h3: 120 40% 40%;
+    --heading-h4: 213 77% 59%;
+    --text-bold: 46 85% 39%;
+    --text-italic: 336 33% 51%;
+    --priority-high: 0 84% 60%;
+    --priority-medium: 48 96% 53%;
+    --priority-low: 217 91% 60%;
+    --highlight-blue: 217 91% 60% / 0.3;
+    --highlight-purple: 264 67% 66% / 0.3;
+    --highlight-pink: 329 86% 61% / 0.3;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased font-sans;
+  }
+
+  /* Custom rich text editor styling */
+  .editor-content h1 {
+    @apply text-[hsl(var(--heading-h1))] text-2xl font-bold mt-4 mb-2;
+  }
+
+  .editor-content h2 {
+    @apply text-[hsl(var(--heading-h2))] text-xl font-semibold mt-4 mb-2;
+  }
+
+  .editor-content h3 {
+    @apply text-[hsl(var(--heading-h3))] text-lg font-semibold mt-4 mb-2;
+  }
+
+  .editor-content h4 {
+    @apply text-[hsl(var(--heading-h4))] text-base font-medium mt-4 mb-2;
+  }
+
+  .editor-content strong {
+    @apply text-[hsl(var(--text-bold))] font-bold;
+  }
+
+  .editor-content em {
+    @apply text-[hsl(var(--text-italic))] italic;
+  }
+
+  .editor-content ul, .editor-content ol {
+    @apply ml-6 my-2;
+  }
+
+  .editor-content ul {
+    @apply list-disc;
+  }
+
+  .editor-content ol {
+    @apply list-decimal;
+  }
+
+  .editor-content p {
+    @apply mb-3;
+  }
+
+  .highlight-blue {
+    @apply bg-[hsl(var(--highlight-blue))];
+  }
+
+  .highlight-purple {
+    @apply bg-[hsl(var(--highlight-purple))];
+  }
+
+  .highlight-pink {
+    @apply bg-[hsl(var(--highlight-pink))];
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-1.5 h-1.5;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-zinc-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-700 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-600;
+  }
+}
