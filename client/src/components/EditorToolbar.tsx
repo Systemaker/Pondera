@@ -16,13 +16,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
   if (!editor) return null;
 
   return (
-    <div className="flex items-center gap-0.5 flex-wrap py-1">
-      <input
-        type="color"
-        onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
-        className="w-5 h-5 border-none bg-transparent cursor-pointer"
-        title="Text Color"
-      />
+    <div className="flex items-center gap-0.5 flex-wrap py-1 justify-center">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={`p-1 rounded hover:bg-zinc-800/50 ${editor.isActive('bold') ? 'bg-zinc-800/50' : ''}`}
@@ -54,7 +48,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('heading', { level: 1 }) ? 'bg-zinc-800' : ''}`}
         title="Heading 1"
       >
-        <Type className="w-4 h-4" />
+        <span className="w-4 h-4 flex items-center justify-center font-bold text-sm">H1</span>
       </button>
       
       <button
