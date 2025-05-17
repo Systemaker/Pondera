@@ -3,7 +3,8 @@ import { Editor } from '@tiptap/react';
 import { 
   Bold, Italic, Underline, Type, List, 
   ListOrdered, Heading2, Heading3, 
-  Highlighter 
+  Highlighter, CheckSquare, Paintbrush,
+  Eraser, Type as FontColorIcon
 } from 'lucide-react';
 import { HIGHLIGHT_COLORS } from '@/lib/constants';
 
@@ -89,6 +90,53 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <ListOrdered className="w-4 h-4" />
       </button>
+
+      <button
+        onClick={() => editor.chain().focus().toggleTaskList().run()}
+        className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('taskList') ? 'bg-zinc-800' : ''}`}
+        title="Task List"
+      >
+        <CheckSquare className="w-4 h-4" />
+      </button>
+      
+      <div className="w-px h-4 bg-zinc-800 mx-1" />
+
+      <button
+        onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
+        className="p-1.5 rounded hover:bg-zinc-800"
+        title="Clear Formatting"
+      >
+        <Eraser className="w-4 h-4" />
+      </button>
+
+      <button
+        onClick={() => {
+          const color = editor.getAttributes('textStyle').color || '#ffffff';
+          editor.chain().focus().setColor(color).run();
+        }}
+        className="p-1.5 rounded hover:bg-zinc-800"
+        title="Format Painter"
+      >
+        <Paintbrush className="w-4 h-4" />
+      </button>
+
+      <input
+        type="color"
+        onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
+        value={editor.getAttributes('textStyle').color || '#ffffff'}
+        className="w-6 h-6 opacity-0 absolute"
+        id="colorPicker"
+      />
+      <label 
+        htmlFor="colorPicker" 
+        className="p-1.5 rounded hover:bg-zinc-800 cursor-pointer flex items-center"
+        title="Text Color"
+      >
+        <FontColorIcon 
+          className="w-4 h-4" 
+          style={{ color: editor.getAttributes('textStyle').color || '#ffffff' }}
+        />
+      </label>
       
       <div className="w-px h-4 bg-zinc-800 mx-1" />
       

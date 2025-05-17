@@ -151,6 +151,16 @@ export default function EnhancedContextMenu({
           <ListOrdered className="w-3.5 h-3.5" />
           <span>Numbered List</span>
         </button>
+        <button 
+          className="w-full text-left px-2 py-1.5 text-sm hover:bg-zinc-700 rounded flex items-center space-x-2"
+          onClick={(e) => {
+            e.stopPropagation();
+            editor.chain().focus().toggleTaskList().run();
+          }}
+        >
+          <CheckSquare className="w-3.5 h-3.5" />
+          <span>Task List</span>
+        </button>
       </div>
       
       {/* Comments Section */}

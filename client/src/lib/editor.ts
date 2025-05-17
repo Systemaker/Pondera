@@ -35,6 +35,8 @@ import { v4 as uuidv4 } from 'uuid';
 import Underline from '@tiptap/extension-underline';
 import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
+import TaskList from '@tiptap/extension-task-list';
+import TaskItem from '@tiptap/extension-task-item';
 
 const BlueHighlight = Highlight.configure({
   HTMLAttributes: { class: 'highlight-blue' },
@@ -65,6 +67,10 @@ export const useCustomEditor = (
       Underline,
       TextStyle,
       Color,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
       CustomDocument.configure({
         history: true,
         heading: {
