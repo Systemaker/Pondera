@@ -86,8 +86,8 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
               updateNote(activeNoteId, { title: e.target.value });
             }
           }}
-          className="w-full bg-transparent border-none text-xl text-gray-100 font-medium focus:outline-none focus:ring-0"
-          placeholder="Note Title"
+          className="w-full bg-transparent border-none text-xl text-purple-400 font-medium focus:outline-none focus:ring-0"
+          placeholder="Título da Nota"
         />
       </div>
       
@@ -95,10 +95,10 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
         className="flex-1 overflow-y-auto p-6"
         onContextMenu={handleEditorContextMenu}
       >
-        <div className="editor-container">
+        <div className="editor-container border border-zinc-800 rounded-md p-4">
           <EditorContent
             editor={editor}
-            className="editor-content focus:outline-none"
+            className="editor-content focus:outline-none min-h-[calc(100vh-200px)]"
           />
         </div>
       </div>

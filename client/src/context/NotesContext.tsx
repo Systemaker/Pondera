@@ -57,7 +57,7 @@ interface NotesContextType {
 }
 
 // Default empty note content
-const DEFAULT_NOTE_CONTENT = `<h1>New Note</h1><p>Start typing here...</p>`;
+const DEFAULT_NOTE_CONTENT = `<p></p>`;
 
 // Create context
 const NotesContext = createContext<NotesContextType | undefined>(undefined);

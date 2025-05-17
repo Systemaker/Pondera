@@ -15,9 +15,6 @@ const CustomHighlight = Highlight.configure({
 });
 
 const CustomDocument = StarterKit.configure({
-  document: {
-    content: 'block+',
-  },
   heading: {
     levels: [1, 2, 3, 4],
   },
@@ -40,6 +37,15 @@ export const useCustomEditor = (
     autofocus: EDITOR_CONFIG.autofocus,
     onUpdate: ({ editor }) => {
       onUpdate(editor.getHTML());
+    },
+    // Enable Markdown shortcut support
+    enableInputRules: true,
+    enablePasteRules: true,
+    // Support Markdown shortcuts for formatting
+    editorProps: {
+      attributes: {
+        class: 'focus:outline-none prose dark:prose-invert prose-sm sm:prose-base max-w-none',
+      },
     },
   });
 };

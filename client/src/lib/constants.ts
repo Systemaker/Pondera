@@ -1,6 +1,6 @@
 // Editor configuration
 export const EDITOR_CONFIG = {
-  placeholder: 'Start typing here...',
+  placeholder: 'Escreva seu texto aqui...',
   autofocus: true,
 };
 
