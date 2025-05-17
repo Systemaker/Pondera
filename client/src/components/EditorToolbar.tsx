@@ -5,7 +5,8 @@ import {
   ListOrdered, Heading2, Heading3, 
   Highlighter, CheckSquare, Paintbrush,
   Eraser, Type as FontColorIcon,
-  MessageSquarePlus, MessageSquareText
+  MessageSquarePlus, MessageSquareText,
+  X
 } from 'lucide-react';
 import { HIGHLIGHT_COLORS } from '@/lib/constants';
 
@@ -127,9 +128,9 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         className="p-1.5 rounded hover:bg-zinc-800 cursor-pointer flex items-center"
         title="Text Color"
       >
-        <FontColorIcon 
-          className="w-4 h-4" 
-          style={{ color: editor.getAttributes('textStyle').color || '#ffffff' }}
+        <div 
+          className="w-4 h-4 rounded-full" 
+          style={{ backgroundColor: editor.getAttributes('textStyle').color || '#ffffff' }}
         />
       </label>
       
@@ -172,7 +173,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         className="p-1.5 rounded hover:bg-zinc-800"
         title="Remove Comment"
       >
-        <MessageSquareText className="w-4 h-4 text-red-500" />
+        <X className="w-4 h-4" />
       </button>
 
       <div className="w-px h-4 bg-zinc-800 mx-1" />

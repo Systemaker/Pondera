@@ -68,9 +68,17 @@ export default function CommentFormModal({
       <DialogContent className="sm:max-w-md bg-zinc-900 border border-zinc-700 text-gray-100">
         <DialogHeader>
           <DialogTitle>{editingCommentId ? "Edit Comment" : "Add Comment"}</DialogTitle>
+          {selectedText && (
+            <div className="mt-2 text-sm text-gray-400">
+              Commented text:
+              <div className="mt-1 bg-zinc-800 p-2 rounded text-gray-300">
+                {selectedText}
+              </div>
+            </div>
+          )}
         </DialogHeader>
         
-        {selectedText && (
+        {false && (
           <div className="mb-4">
             <Label className="text-sm font-medium text-gray-400 mb-1">Selected Text</Label>
             <div className="bg-zinc-800 p-3 rounded text-sm text-gray-300 italic">
