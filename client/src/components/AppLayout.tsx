@@ -111,20 +111,25 @@ export default function AppLayout() {
         startX = e.clientX;
         startWidth = rightColumnRef.current?.offsetWidth || 0;
       }
+      
+      // Adicionar classe ao body para indicar que está redimensionando
+      document.body.classList.add('resizing');
     };
 
     const handleMouseMove = (e: MouseEvent) => {
       if (isDraggingLeft && leftColumnRef.current) {
         const newWidth = startWidth + (e.clientX - startX);
-        if (newWidth >= 200 && newWidth <= 400) {
+        if (newWidth >= 150 && newWidth <= 500) {
           leftColumnRef.current.style.width = `${newWidth}px`;
           leftColumnRef.current.style.minWidth = `${newWidth}px`;
+          leftColumnRef.current.style.flexShrink = '0';
         }
       } else if (isDraggingRight && rightColumnRef.current) {
         const newWidth = startWidth - (e.clientX - startX);
-        if (newWidth >= 200 && newWidth <= 400) {
+        if (newWidth >= 150 && newWidth <= 500) {
           rightColumnRef.current.style.width = `${newWidth}px`;
           rightColumnRef.current.style.minWidth = `${newWidth}px`;
+          rightColumnRef.current.style.flexShrink = '0';
         }
       }
     };
@@ -132,40 +137,62 @@ export default function AppLayout() {
     const handleMouseUp = () => {
       isDraggingLeft = false;
       isDraggingRight = false;
+      
+      // Remover classe do body
+      document.body.classList.remove('resizing');
     };
 
+    // Event listeners para os elementos de redimensionamento
+    const handleLeftMouseDown = (e: MouseEvent) => handleMouseDown(e, true);
+    const handleRightMouseDown = (e: MouseEvent) => handleMouseDown(e, false);
+    
     // Adicionar event listeners
-    leftResizeRef.current?.addEventListener('mousedown', (e) => handleMouseDown(e, true));
-    rightResizeRef.current?.addEventListener('mousedown', (e) => handleMouseDown(e, false));
+    const leftResizeElement = leftResizeRef.current;
+    const rightResizeElement = rightResizeRef.current;
+    
+    if (leftResizeElement) {
+      leftResizeElement.addEventListener('mousedown', handleLeftMouseDown);
+    }
+    
+    if (rightResizeElement) {
+      rightResizeElement.addEventListener('mousedown', handleRightMouseDown);
+    }
+    
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
       // Remover event listeners
-      leftResizeRef.current?.removeEventListener('mousedown', (e) => handleMouseDown(e, true));
-      rightResizeRef.current?.removeEventListener('mousedown', (e) => handleMouseDown(e, false));
+      if (leftResizeElement) {
+        leftResizeElement.removeEventListener('mousedown', handleLeftMouseDown);
+      }
+      
+      if (rightResizeElement) {
+        rightResizeElement.removeEventListener('mousedown', handleRightMouseDown);
+      }
+      
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, []);
+  }, [showLeftColumn, showRightColumn]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-black text-gray-200">
       {/* Coluna de notas (esquerda) */}
       {showLeftColumn ? (
         <>
-          <div ref={leftColumnRef} className="flex-shrink-0">
+          <div ref={leftColumnRef} className="flex-shrink-0 w-64 min-w-[200px] max-w-[400px] overflow-hidden">
             <NoteListColumn />
           </div>
           <div 
             ref={leftResizeRef} 
-            className="w-1 bg-zinc-800 hover:bg-purple-500 cursor-col-resize transition-colors"
+            className="w-1.5 bg-zinc-800 hover:bg-purple-500 cursor-col-resize transition-colors"
           />
         </>
       ) : (
         <button 
           onClick={() => setShowLeftColumn(true)} 
-          className="p-2 bg-zinc-900 hover:bg-zinc-800 text-purple-400 transition-colors border-r border-zinc-700"
+          className="p-2 bg-zinc-900 hover:bg-zinc-800 text-gray-400 transition-colors border-r border-zinc-700"
           title="Mostrar lista de notas"
         >
           <ChevronRight size={16} />
@@ -173,17 +200,15 @@ export default function AppLayout() {
       )}
       
       {/* Coluna do editor (centro) */}
-      <div className="flex-1 flex flex-col">
-        {!showLeftColumn && (
-          <div className="absolute top-2 left-2 z-10">
-            <button 
-              onClick={() => setShowLeftColumn(false)} 
-              className="p-1 bg-zinc-800 hover:bg-zinc-700 rounded-full text-purple-400 transition-colors"
-              title="Ocultar lista de notas"
-            >
-              <ChevronLeft size={16} />
-            </button>
-          </div>
+      <div className="flex-1 flex flex-col relative">
+        {showLeftColumn && (
+          <button 
+            onClick={() => setShowLeftColumn(false)}
+            className="absolute top-3 left-3 z-10 p-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-gray-400 transition-colors"
+            title="Ocultar lista de notas"
+          >
+            <ChevronLeft size={16} />
+          </button>
         )}
         
         <EditorColumn 
@@ -191,16 +216,14 @@ export default function AppLayout() {
           setEditorRef={(editor) => editorRef.current = editor}
         />
         
-        {!showRightColumn && (
-          <div className="absolute top-2 right-2 z-10">
-            <button 
-              onClick={() => setShowRightColumn(false)} 
-              className="p-1 bg-zinc-800 hover:bg-zinc-700 rounded-full text-purple-400 transition-colors"
-              title="Ocultar lista de comentários"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
+        {showRightColumn && (
+          <button 
+            onClick={() => setShowRightColumn(false)}
+            className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-gray-400 transition-colors"
+            title="Ocultar lista de comentários"
+          >
+            <ChevronRight size={16} />
+          </button>
         )}
       </div>
       
@@ -209,9 +232,9 @@ export default function AppLayout() {
         <>
           <div 
             ref={rightResizeRef} 
-            className="w-1 bg-zinc-800 hover:bg-purple-500 cursor-col-resize transition-colors" 
+            className="w-1.5 bg-zinc-800 hover:bg-purple-500 cursor-col-resize transition-colors" 
           />
-          <div ref={rightColumnRef} className="flex-shrink-0">
+          <div ref={rightColumnRef} className="flex-shrink-0 w-64 min-w-[200px] max-w-[400px] overflow-hidden">
             <CommentListColumn 
               onEditComment={handleEditComment} 
             />
@@ -220,7 +243,7 @@ export default function AppLayout() {
       ) : (
         <button 
           onClick={() => setShowRightColumn(true)} 
-          className="p-2 bg-zinc-900 hover:bg-zinc-800 text-purple-400 transition-colors border-l border-zinc-700"
+          className="p-2 bg-zinc-900 hover:bg-zinc-800 text-gray-400 transition-colors border-l border-zinc-700"
           title="Mostrar lista de comentários"
         >
           <ChevronLeft size={16} />
