@@ -4,6 +4,9 @@ import { MessageSquare } from "lucide-react";
 
 interface CommentListColumnProps {
   onEditComment: (commentId: string) => void;
+  setShowCommentModal: (show: boolean) => void;
+  setSelectedTextInfo: (info: { text: string; spanId: string } | null) => void;
+  setEditingCommentId: (id: string | null) => void;
 }
 
 export default function CommentListColumn({ onEditComment }: CommentListColumnProps) {

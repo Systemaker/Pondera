@@ -285,7 +285,10 @@ export default function AppLayout() {
           />
           <div ref={rightColumnRef} className="flex-shrink-0 w-64 min-w-[200px] max-w-[400px] overflow-hidden">
             <CommentListColumn 
-              onEditComment={handleEditComment} 
+              onEditComment={handleEditComment}
+              setShowCommentModal={setShowCommentModal}
+              setSelectedTextInfo={setSelectedTextInfo}
+              setEditingCommentId={setEditingCommentId}
             />
           </div>
         </>
