@@ -36,11 +36,11 @@ export default function AppLayout() {
     // If no text is selected, select the word at cursor position
     if (!selectedText || selectedText.trim() === "") {
       const { view } = editorRef.current;
-      const pos = view.posAtCoords({ left: e.clientX, top: e.clientY });
+      const coords = view.posAtCoords({ left: e.clientX, top: e.clientY });
       
-      if (pos !== null) {
-        const $pos = view.state.doc.resolve(pos);
-        const wordRange = view.state.wordRange($pos.pos);
+      if (coords) {
+        const $pos = view.state.doc.resolve(coords);
+        const wordRange = view.state.selection.constructor.word($pos);
         const word = view.state.doc.textBetween(wordRange.from, wordRange.to);
         
         if (word) {

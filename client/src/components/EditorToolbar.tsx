@@ -158,45 +158,6 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
 
       <div className="w-px h-4 bg-zinc-800 mx-1" />
 
-      <input
-        type="color"
-        onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
-        value={editor.getAttributes('textStyle').color || '#ffffff'}
-        className="w-6 h-6 opacity-0 absolute"
-        id="colorPicker"
-      />
-      <label 
-        htmlFor="colorPicker" 
-        className="p-1.5 rounded hover:bg-zinc-800 cursor-pointer flex items-center"
-        title="Text Color"
-      >
-        <div 
-          className="w-3 h-3 rounded-full" 
-          style={{ backgroundColor: editor.getAttributes('textStyle').color || '#ffffff' }}
-        />
-      </label>
-
-      <button
-        onClick={() => {
-          const color = editor.getAttributes('textStyle').color || '#ffffff';
-          editor.chain().focus().setColor(color).run();
-        }}
-        className="p-1.5 rounded hover:bg-zinc-800"
-        title="Format Painter"
-      >
-        <Paintbrush className="w-4 h-4" />
-      </button>
-
-      <button
-        onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
-        className="p-1.5 rounded hover:bg-zinc-800"
-        title="Clear Formatting"
-      >
-        <Eraser className="w-4 h-4" />
-      </button>
-
-      <div className="w-px h-4 bg-zinc-800 mx-1" />
-
       <button
         onClick={() => {
           const selection = editor.state.selection;
