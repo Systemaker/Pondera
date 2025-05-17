@@ -2,8 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import { EditorContent, Editor } from "@tiptap/react";
 import { useNotes } from "@/context/NotesContext";
 import { useCustomEditor } from "@/lib/editor";
-import { Download, FileText } from "lucide-react";
+import { Download, FileText, FileJson, FilePdf } from "lucide-react";
 import { countWords } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface EditorColumnProps {
   onContextMenu: (e: React.MouseEvent, selectedText: string) => void;

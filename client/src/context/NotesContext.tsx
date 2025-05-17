@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "@/hooks/use-toast";
 
 // Types for our data model
 export interface Comment {
@@ -53,6 +54,8 @@ interface NotesContextType {
   addHighlight: (noteId: string, highlight: Omit<Highlight, 'id' | 'created_at'>) => void;
   deleteHighlight: (noteId: string, highlightId: string) => void;
   exportNoteToMarkdown: (noteId: string) => void;
+  exportNoteToPDF: (noteId: string) => void;
+  exportNoteToDocx: (noteId: string) => void;
   getFormattedDate: (dateString: string) => string;
 }
 
@@ -343,8 +346,104 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Exportação concluída",
+        description: "Arquivo Markdown gerado com sucesso",
+      });
     } catch (error) {
       console.error('Failed to export note to Markdown:', error);
+      toast({
+        title: "Erro na exportação",
+        description: "Não foi possível exportar para Markdown",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  // Export note to PDF
+  const exportNoteToPDF = async (noteId: string) => {
+    const note = notes.find(note => note.id === noteId);
+    if (!note) return;
+    
+    try {
+      // Use jsPDF to create a PDF from HTML
+      const { jsPDF } = await import('jspdf');
+      const doc = new jsPDF();
+      
+      // Add title
+      doc.setFontSize(18);
+      doc.text(note.title, 20, 20);
+      
+      // Add content (simple text extraction for now)
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = note.content_html;
+      const text = tempDiv.textContent || tempDiv.innerText || '';
+      
+      doc.setFontSize(12);
+      doc.text(text, 20, 30, { maxWidth: 170 });
+      
+      // Save the PDF
+      doc.save(`${note.title.replace(/[^\w\s]/gi, '')}.pdf`);
+      
+      toast({
+        title: "Exportação concluída",
+        description: "Arquivo PDF gerado com sucesso",
+      });
+    } catch (error) {
+      console.error('Failed to export note to PDF:', error);
+      toast({
+        title: "Erro na exportação",
+        description: "Não foi possível exportar para PDF",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  // Export note to DOCX
+  const exportNoteToDocx = async (noteId: string) => {
+    const note = notes.find(note => note.id === noteId);
+    if (!note) return;
+    
+    try {
+      // Use html-to-docx to convert HTML to DOCX
+      const HTMLtoDOCX = (await import('html-to-docx')).default;
+      
+      // Create file content
+      const content = `<h1>${note.title}</h1>${note.content_html}`;
+      
+      // Convert to DOCX
+      const docxBlob = await HTMLtoDOCX(content, null, {
+        title: note.title,
+        margin: {
+          top: 1440,
+          right: 1440,
+          bottom: 1440,
+          left: 1440,
+        },
+      });
+      
+      // Create download link
+      const url = URL.createObjectURL(docxBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${note.title.replace(/[^\w\s]/gi, '')}.docx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Exportação concluída",
+        description: "Arquivo DOCX gerado com sucesso",
+      });
+    } catch (error) {
+      console.error('Failed to export note to DOCX:', error);
+      toast({
+        title: "Erro na exportação",
+        description: "Não foi possível exportar para DOCX",
+        variant: "destructive",
+      });
     }
   };
 
@@ -407,6 +506,8 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     addHighlight,
     deleteHighlight,
     exportNoteToMarkdown,
+    exportNoteToPDF,
+    exportNoteToDocx,
     getFormattedDate
   };
 
