@@ -87,7 +87,7 @@
 
   /* Custom rich text editor styling */
   .editor-content h1 {
-    @apply text-[hsl(var(--heading-h1))] text-2xl font-bold mt-4 mb-2;
+    @apply text-[hsl(var(--heading-h1))] text-xl font-semibold mt-4 mb-2;
   }
 
   .editor-content h2 {

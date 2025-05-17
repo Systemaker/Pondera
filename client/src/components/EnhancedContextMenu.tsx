@@ -3,7 +3,8 @@ import { useEditorCommands } from '@/lib/editor';
 import { Editor } from '@tiptap/react';
 import { 
   Type, Heading2, Heading3, Bold, Italic, Underline,
-  ListOrdered, List, MessageSquarePlus, MessageSquareText
+  ListOrdered, List, MessageSquarePlus, MessageSquareText,
+  CheckSquare
 } from 'lucide-react';
 import { HIGHLIGHT_COLORS } from '@/lib/constants';
 import { useNotes, Note } from '@/context/NotesContext';
