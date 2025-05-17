@@ -33,18 +33,21 @@ import { v4 as uuidv4 } from 'uuid';
 // Custom extensions
 // Custom highlight extensions for different colors
 const BlueHighlight = Highlight.configure({
-  multicolor: true,
   HTMLAttributes: { class: 'highlight-blue' },
+  multicolor: true,
+  types: ['highlight-blue'],
 });
 
 const PurpleHighlight = Highlight.configure({
-  multicolor: true,
   HTMLAttributes: { class: 'highlight-purple' },
+  multicolor: true,
+  types: ['highlight-purple'],
 });
 
 const PinkHighlight = Highlight.configure({
-  multicolor: true,
   HTMLAttributes: { class: 'highlight-pink' },
+  multicolor: true,
+  types: ['highlight-pink'],
 });
 
 const CustomDocument = StarterKit.configure({
@@ -117,13 +120,26 @@ export const useCustomEditor = (
     onUpdate: ({ editor }) => {
       onUpdate(editor.getHTML());
     },
-    // Habilitar atalhos Markdown
+    // Enable Markdown shortcuts and keyboard bindings
     enableInputRules: true,
     enablePasteRules: true,
-    // Configurar suporte a atalhos Markdown para formatação
     editorProps: {
       attributes: {
         class: 'focus:outline-none prose dark:prose-invert prose-sm sm:prose-base max-w-none text-white',
+      },
+    },
+    // Add keyboard shortcuts
+    editable: true,
+    handleDOMEvents: {
+      keydown: (_view, event) => {
+        // Handle custom keyboard shortcuts
+        if (event.ctrlKey || event.metaKey) {
+          if (event.key === 'b') return false; // Let Tiptap handle bold
+          if (event.key === 'i') return false; // Let Tiptap handle italic
+          if (event.altKey && event.key === 'c') return true; // Comment shortcut
+          if (event.altKey && event.key === 'h') return true; // Highlight shortcut
+        }
+        return false;
       },
     },
   });

@@ -50,19 +50,22 @@ export default function NoteListColumn() {
 
   return (
     <div className="w-64 min-w-[200px] flex-shrink-0 border-r border-zinc-800 flex flex-col h-full overflow-hidden">
-      <div className="p-4 flex justify-between items-center border-b border-zinc-800">
-        <h1 className="text-lg font-semibold text-gray-400 truncate flex items-center gap-2">
+      <div className="p-4 flex items-center gap-3 border-b border-zinc-800">
+        <h1 className="text-lg font-semibold text-gray-300 truncate flex items-center gap-2">
           <FileText className="w-4 h-4" /> Notes
         </h1>
-        <div className="flex-shrink-0 flex space-x-2">
+        <div className="flex items-center gap-1">
           <button 
             onClick={createNote} 
-            className="p-1.5 rounded-md hover:bg-zinc-800 transition-colors text-gray-400" 
+            className="p-1.5 rounded-md bg-zinc-800/50 hover:bg-zinc-700 transition-colors text-gray-300" 
             title="Nova Nota"
           >
             <Plus className="w-4 h-4" />
           </button>
-          <button className="p-1.5 rounded-md hover:bg-zinc-800 transition-colors text-gray-400" title="Configurações">
+          <button 
+            className="p-1.5 rounded-md bg-zinc-800/50 hover:bg-zinc-700 transition-colors text-gray-300" 
+            title="Configurações"
+          >
             <Settings className="w-4 h-4" />
           </button>
         </div>
