@@ -27,7 +27,50 @@ export const useCustomEditor = (
 ) => {
   return useEditor({
     extensions: [
-      CustomDocument,
+      CustomDocument.configure({
+        // Melhorar suporte a atalhos Markdown
+        heading: {
+          levels: [1, 2, 3, 4, 5, 6],
+          HTMLAttributes: {
+            class: 'text-white',
+          },
+        },
+        bulletList: {
+          HTMLAttributes: {
+            class: 'text-white',
+          },
+        },
+        orderedList: {
+          HTMLAttributes: {
+            class: 'text-white',
+          },
+        },
+        blockquote: {
+          HTMLAttributes: {
+            class: 'text-white border-l-4 border-purple-500 pl-4',
+          },
+        },
+        codeBlock: {
+          HTMLAttributes: {
+            class: 'bg-zinc-900 text-white p-2 rounded',
+          },
+        },
+        code: {
+          HTMLAttributes: {
+            class: 'bg-zinc-900 text-white px-1 rounded',
+          },
+        },
+        bold: {
+          HTMLAttributes: {
+            class: 'text-white font-bold',
+          },
+        },
+        italic: {
+          HTMLAttributes: {
+            class: 'text-white italic',
+          },
+        },
+      }),
       CustomHighlight,
       Placeholder.configure({
         placeholder: EDITOR_CONFIG.placeholder,
@@ -38,13 +81,13 @@ export const useCustomEditor = (
     onUpdate: ({ editor }) => {
       onUpdate(editor.getHTML());
     },
-    // Enable Markdown shortcut support
+    // Habilitar atalhos Markdown
     enableInputRules: true,
     enablePasteRules: true,
-    // Support Markdown shortcuts for formatting
+    // Configurar suporte a atalhos Markdown para formatação
     editorProps: {
       attributes: {
-        class: 'focus:outline-none prose dark:prose-invert prose-sm sm:prose-base max-w-none',
+        class: 'focus:outline-none prose dark:prose-invert prose-sm sm:prose-base max-w-none text-white',
       },
     },
   });
