@@ -51,8 +51,8 @@ export default function NoteListColumn() {
   return (
     <div className="w-64 min-w-[200px] flex-shrink-0 border-r border-zinc-800 flex flex-col h-full overflow-hidden">
       <div className="p-4 flex justify-between items-center border-b border-zinc-800">
-        <h1 className="text-lg font-semibold text-gray-400">Notes</h1>
-        <div className="flex space-x-2">
+        <h1 className="text-lg font-semibold text-gray-400 truncate">Notes</h1>
+        <div className="flex-shrink-0 flex space-x-2">
           <button 
             onClick={createNote} 
             className="p-1.5 rounded-md hover:bg-zinc-800 transition-colors text-gray-400" 
@@ -82,8 +82,8 @@ export default function NoteListColumn() {
               onClick={() => setActiveNoteId(note.id)}
             >
               <div className="flex justify-between items-start mb-1">
-                <h3 className="font-medium text-gray-100 truncate">{note.title}</h3>
-                <div className="flex items-center space-x-1 text-gray-400">
+                <h3 className="font-medium text-gray-100 truncate flex-1 pr-1">{note.title}</h3>
+                <div className="flex-shrink-0 flex items-center space-x-1 text-gray-400">
                   {note.is_pinned && <Pin className="w-3.5 h-3.5" />}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

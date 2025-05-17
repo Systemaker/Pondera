@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { EditorContent, Editor } from "@tiptap/react";
 import { useNotes } from "@/context/NotesContext";
 import { useCustomEditor } from "@/lib/editor";
-import { Download, FileText, FileJson, FilePdf } from "lucide-react";
+import { Download, FileText, FileType, File } from "lucide-react";
 import { countWords } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -17,7 +17,15 @@ interface EditorColumnProps {
 }
 
 export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColumnProps) {
-  const { activeNote, activeNoteId, updateNote, getFormattedDate, exportNoteToMarkdown } = useNotes();
+  const { 
+    activeNote, 
+    activeNoteId, 
+    updateNote, 
+    getFormattedDate, 
+    exportNoteToMarkdown,
+    exportNoteToPDF,
+    exportNoteToDocx 
+  } = useNotes();
   const [wordCount, setWordCount] = useState(0);
   
   // Initialize editor with content from active note
@@ -115,14 +123,40 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
           <span>Last edited: {getFormattedDate(activeNote.updated_at)}</span>
         </div>
         <div className="flex space-x-4">
-          <button 
-            className="hover:text-gray-200 transition-colors flex items-center space-x-1" 
-            title="Export to Markdown"
-            onClick={() => activeNoteId && exportNoteToMarkdown(activeNoteId)}
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export</span>
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button 
+                className="hover:text-gray-200 transition-colors flex items-center space-x-1" 
+                title="Export options"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Export</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-zinc-900 border border-zinc-700 text-gray-200 text-sm">
+              <DropdownMenuItem 
+                className="flex items-center gap-2 focus:bg-zinc-800 focus:text-gray-100"
+                onClick={() => activeNoteId && exportNoteToMarkdown(activeNoteId)}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                Export to Markdown
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                className="flex items-center gap-2 focus:bg-zinc-800 focus:text-gray-100"
+                onClick={() => activeNoteId && exportNoteToPDF(activeNoteId)}
+              >
+                <File className="w-3.5 h-3.5" />
+                Export to PDF
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                className="flex items-center gap-2 focus:bg-zinc-800 focus:text-gray-100"
+                onClick={() => activeNoteId && exportNoteToDocx(activeNoteId)}
+              >
+                <FileType className="w-3.5 h-3.5" />
+                Export to DOCX
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <button className="hover:text-gray-200 transition-colors flex items-center space-x-1" title="Word Count">
             <FileText className="w-3.5 h-3.5" />
             <span>{wordCount} words</span>
