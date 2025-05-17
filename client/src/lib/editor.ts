@@ -158,7 +158,7 @@ export const applyCommentSpan = (editor: Editor | null) => {
   
   editor.chain()
     .focus()
-    .setMark('comment-highlight')
+    .setMark('comment-highlight', { 'data-comment-id': spanId })
     .run();
   
   return { spanId, selectedText };

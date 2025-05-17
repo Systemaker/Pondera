@@ -1,5 +1,6 @@
 import { useNotes } from "@/context/NotesContext";
 import { getPriorityDotClass } from "@/lib/utils";
+import { MessageSquare } from "lucide-react";
 
 interface CommentListColumnProps {
   onEditComment: (commentId: string) => void;
