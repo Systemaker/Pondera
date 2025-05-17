@@ -60,14 +60,14 @@ export default function NoteListColumn() {
   return (
     <div className="w-64 min-w-[200px] flex-shrink-0 border-r border-zinc-800 flex flex-col h-full overflow-hidden">
       <div className="p-4 flex items-center gap-3 border-b border-zinc-800">
-        <h1 className="text-lg font-semibold text-gray-300 truncate flex items-center gap-2">
-          <FileText className="w-4 h-4" /> Notes
+        <h1 className="text-lg font-semibold text-[#5950a3] truncate flex items-center gap-2">
+          <FileText className="w-4 h-4 text-[#5950a3]" /> Notes
         </h1>
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 border border-white/10 hover:border-white/20"
+            className="h-6 w-6 border border-white/10 hover:border-white/20 text-[#5950a3]"
             onClick={handleCreateNote}
           >
             <Plus className="h-4 w-4" />
@@ -75,7 +75,7 @@ export default function NoteListColumn() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 border border-white/10 hover:border-white/20"
+            className="h-6 w-6 border border-white/10 hover:border-white/20 text-[#5950a3]"
             onClick={handleOpenSettings}
           >
             <Settings className="h-4 w-4" />

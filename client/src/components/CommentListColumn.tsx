@@ -9,7 +9,12 @@ interface CommentListColumnProps {
   setEditingCommentId: (id: string | null) => void;
 }
 
-export default function CommentListColumn({ onEditComment }: CommentListColumnProps) {
+export default function CommentListColumn({ 
+  onEditComment,
+  setShowCommentModal,
+  setSelectedTextInfo,
+  setEditingCommentId 
+}: CommentListColumnProps) {
   const { activeNote, getFormattedDate } = useNotes();
   
   // Sort comments by their order in the document
@@ -20,7 +25,7 @@ export default function CommentListColumn({ onEditComment }: CommentListColumnPr
   return (
     <div className="w-64 min-w-[200px] flex-shrink-0 border-l border-zinc-800 flex flex-col h-full overflow-hidden">
       <div className="p-4 border-b border-zinc-800">
-        <h1 className="text-lg font-semibold text-gray-400 truncate flex items-center gap-2">
+        <h1 className="text-lg font-semibold text-[#5950a3] truncate flex items-center gap-2">
           Comments <MessageSquare className="w-4 h-4" />
         </h1>
       </div>
