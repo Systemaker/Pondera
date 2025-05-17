@@ -33,6 +33,8 @@ import { v4 as uuidv4 } from 'uuid';
 // Custom extensions
 // Custom highlight extensions for different colors
 import Underline from '@tiptap/extension-underline';
+import TextStyle from '@tiptap/extension-text-style';
+import Color from '@tiptap/extension-color';
 
 const BlueHighlight = Highlight.configure({
   HTMLAttributes: { class: 'highlight-blue' },
@@ -61,6 +63,8 @@ export const useCustomEditor = (
     extensions: [
       CommentHighlight,
       Underline,
+      TextStyle,
+      Color,
       CustomDocument.configure({
         history: true,
         heading: {

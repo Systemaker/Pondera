@@ -16,6 +16,12 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
 
   return (
     <div className="flex items-center gap-0.5 flex-wrap py-1">
+      <input
+        type="color"
+        onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
+        className="w-5 h-5 border-none bg-transparent cursor-pointer"
+        title="Text Color"
+      />
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={`p-1 rounded hover:bg-zinc-800/50 ${editor.isActive('bold') ? 'bg-zinc-800/50' : ''}`}

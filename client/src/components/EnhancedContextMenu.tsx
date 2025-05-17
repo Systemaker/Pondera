@@ -2,7 +2,7 @@ import { MouseEvent, useRef, useEffect } from 'react';
 import { useEditorCommands } from '@/lib/editor';
 import { Editor } from '@tiptap/react';
 import { 
-  Type, Heading2, Heading3, Bold, Italic, 
+  Type, Heading2, Heading3, Bold, Italic, Underline,
   ListOrdered, List, MessageSquarePlus, MessageSquareText
 } from 'lucide-react';
 import { HIGHLIGHT_COLORS } from '@/lib/constants';
