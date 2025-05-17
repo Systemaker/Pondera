@@ -48,7 +48,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('heading', { level: 1 }) ? 'bg-zinc-800' : ''}`}
         title="Heading 1"
       >
-        <span className="w-4 h-4 flex items-center justify-center font-bold text-sm">H1</span>
+        <Type className="w-4 h-4" />
       </button>
       
       <button
@@ -132,6 +132,48 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         />
       </label>
       
+      <div className="w-px h-4 bg-zinc-800 mx-1" />
+
+      <button
+        onClick={() => {
+          const selection = editor.state.selection;
+          const text = editor.state.doc.textBetween(selection.from, selection.to);
+          if (text) {
+            // Trigger add comment functionality
+            editor.chain().focus().setMark('comment-highlight').run();
+          }
+        }}
+        className="p-1.5 rounded hover:bg-zinc-800"
+        title="Add Comment"
+      >
+        <MessageSquarePlus className="w-4 h-4" />
+      </button>
+
+      <button
+        onClick={() => {
+          // Trigger edit comment functionality for selected text
+          const selection = editor.state.selection;
+          if (!selection.empty) {
+            editor.chain().focus().toggleMark('comment-highlight').run();
+          }
+        }}
+        className="p-1.5 rounded hover:bg-zinc-800"
+        title="Edit Comment"
+      >
+        <MessageSquareText className="w-4 h-4" />
+      </button>
+
+      <button
+        onClick={() => {
+          // Remove comment mark from selected text
+          editor.chain().focus().unsetMark('comment-highlight').run();
+        }}
+        className="p-1.5 rounded hover:bg-zinc-800"
+        title="Remove Comment"
+      >
+        <MessageSquareText className="w-4 h-4 text-red-500" />
+      </button>
+
       <div className="w-px h-4 bg-zinc-800 mx-1" />
       
       {HIGHLIGHT_COLORS.map((color) => (

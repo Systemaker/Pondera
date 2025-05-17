@@ -37,7 +37,17 @@ export default function CommentListColumn({ onEditComment }: CommentListColumnPr
             <div
               key={comment.id}
               className={`px-4 py-3 hover:bg-zinc-900/50 border-l-2 ${getPriorityDotClass(comment.priority)} cursor-pointer transition-all bg-zinc-900`}
-              onClick={() => onEditComment(comment.id)}
+              onClick={() => {
+  // Find the comment element and scroll it into view
+  const commentElement = document.querySelector(`[data-comment-id="${comment.target_span_id}"]`);
+  if (commentElement) {
+    commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Add a temporary highlight effect
+    commentElement.classList.add('flash-highlight');
+    setTimeout(() => commentElement.classList.remove('flash-highlight'), 2000);
+  }
+  onEditComment(comment.id);
+}}
             >
               <div className="flex justify-between items-start mb-1.5">
                 <div className="flex items-center space-x-1.5">

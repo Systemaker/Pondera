@@ -142,6 +142,15 @@
     @apply bg-yellow-500/20 border-b-2 border-yellow-500 cursor-pointer;
   }
 
+  .flash-highlight {
+    animation: flash 2s ease-out;
+  }
+
+  @keyframes flash {
+    0% { background-color: rgba(234, 179, 8, 0.3); }
+    100% { background-color: rgba(234, 179, 8, 0.2); }
+  }
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     @apply w-1.5 h-1.5;
