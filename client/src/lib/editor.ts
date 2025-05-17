@@ -67,26 +67,11 @@ export const useCustomEditor = (
           }
         }
       }),
-      CustomDocument.configure({
-        addKeyboardShortcuts() {
-          return {
-            'Mod-1': () => this.editor.commands.toggleHeading({ level: 1 }),
-            'Mod-2': () => this.editor.commands.toggleHeading({ level: 2 }),
-            'Mod-3': () => this.editor.commands.toggleHeading({ level: 3 }),
-            'Mod-b': () => this.editor.commands.toggleBold(),
-            'Mod-i': () => this.editor.commands.toggleItalic(),
-            'Mod-l': () => this.editor.commands.toggleBulletList(),
-            'Mod-Shift-7': () => this.editor.commands.toggleOrderedList(),
-            'Alt-b': () => this.editor.commands.toggleHighlight({ color: 'highlight-blue' }),
-            'Alt-p': () => this.editor.commands.toggleHighlight({ color: 'highlight-purple' }),
-            'Alt-k': () => this.editor.commands.toggleHighlight({ color: 'highlight-pink' }),
-          }
-        }
-      }),
+      CustomDocument,
       BlueHighlight,
       PurpleHighlight,
       PinkHighlight,
-        // Melhorar suporte a atalhos Markdown
+      StarterKit.configure({
         heading: {
           levels: [1, 2, 3, 4, 5, 6],
           HTMLAttributes: {
