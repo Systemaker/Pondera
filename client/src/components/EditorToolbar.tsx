@@ -15,13 +15,13 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
   if (!editor) return null;
 
   return (
-    <div className="border-b border-zinc-800 p-2 flex items-center gap-1 flex-wrap">
+    <div className="flex items-center gap-0.5 flex-wrap py-1">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('bold') ? 'bg-zinc-800' : ''}`}
+        className={`p-1 rounded hover:bg-zinc-800/50 ${editor.isActive('bold') ? 'bg-zinc-800/50' : ''}`}
         title="Bold"
       >
-        <Bold className="w-4 h-4" />
+        <Bold className="w-3 h-3" />
       </button>
       
       <button

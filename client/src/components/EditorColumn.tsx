@@ -93,7 +93,6 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
     <div className="flex-1 flex flex-col h-full bg-black overflow-hidden">
       {/* Title input - separate from content */}
       <div className="border-b border-zinc-800 p-4 text-center">
-        <EditorToolbar editor={editor} />
         <input
           type="text"
           value={activeNote?.title || ""}
@@ -112,6 +111,7 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
         onContextMenu={handleEditorContextMenu}
         onClick={() => editor?.commands.focus()}
       >
+        <EditorToolbar editor={editor} />
         <div className="editor-container border border-zinc-800 rounded-md p-4 cursor-text">
           <EditorContent
             editor={editor}
