@@ -2,6 +2,28 @@ import { Editor, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
 import Placeholder from '@tiptap/extension-placeholder';
+import { Mark } from '@tiptap/core';
+
+const CommentHighlight = Mark.create({
+  name: 'comment-highlight',
+  addAttributes() {
+    return {
+      'data-comment-id': {
+        default: null,
+      }
+    };
+  },
+  parseHTML() {
+    return [
+      {
+        tag: 'span.comment-highlight',
+      },
+    ];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['span', { class: 'comment-highlight', ...HTMLAttributes }, 0];
+  },
+});
 import { useCallback } from 'react';
 import { EDITOR_CONFIG, SPAN_ID_PREFIX } from './constants';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,6 +49,7 @@ export const useCustomEditor = (
 ) => {
   return useEditor({
     extensions: [
+      CommentHighlight,
       CustomDocument.configure({
         // Melhorar suporte a atalhos Markdown
         heading: {
