@@ -4,7 +4,8 @@ import {
   Bold, Italic, Underline, Type, List, 
   ListOrdered, Heading2, Heading3, 
   Highlighter, CheckSquare, Paintbrush,
-  Eraser, Type as FontColorIcon
+  Eraser, Type as FontColorIcon,
+  MessageSquarePlus, MessageSquareText
 } from 'lucide-react';
 import { HIGHLIGHT_COLORS } from '@/lib/constants';
 
