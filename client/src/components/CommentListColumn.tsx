@@ -16,7 +16,7 @@ export default function CommentListColumn({ onEditComment }: CommentListColumnPr
   return (
     <div className="w-64 min-w-[200px] flex-shrink-0 border-l border-zinc-800 flex flex-col h-full overflow-hidden">
       <div className="p-4 border-b border-zinc-800">
-        <h1 className="text-lg font-semibold text-gray-300">Comments</h1>
+        <h1 className="text-lg font-semibold text-purple-400">Comments</h1>
       </div>
       
       <div className="overflow-y-auto flex-1 py-2">

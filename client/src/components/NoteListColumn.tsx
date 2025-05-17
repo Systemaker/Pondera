@@ -51,7 +51,7 @@ export default function NoteListColumn() {
   return (
     <div className="w-64 min-w-[200px] flex-shrink-0 border-r border-zinc-800 flex flex-col h-full overflow-hidden">
       <div className="p-4 flex justify-between items-center border-b border-zinc-800">
-        <h1 className="text-lg font-semibold text-gray-300">Notes</h1>
+        <h1 className="text-lg font-semibold text-purple-400">Notes</h1>
         <div className="flex space-x-2">
           <button 
             onClick={createNote} 

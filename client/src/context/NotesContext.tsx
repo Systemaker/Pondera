@@ -129,8 +129,8 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             ...note,
             ...updates,
             updated_at: new Date().toISOString(),
-            // Preserve title if not explicitly updated
-            title: updates.title || (updates.content_html ? extractTitleFromContent(updates.content_html) : note.title)
+            // Apenas atualiza o título se for explicitamente solicitado
+            title: updates.title !== undefined ? updates.title : note.title
           };
         }
         return note;
