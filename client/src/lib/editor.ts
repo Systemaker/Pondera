@@ -60,18 +60,9 @@ export const useCustomEditor = (
 ) => {
   return useEditor({
     extensions: [
-      CommentHighlight.configure({
-        addKeyboardShortcuts() {
-          return {
-            'Mod-Alt-c': () => this.editor.commands.toggleComment(),
-          }
-        }
-      }),
-      CustomDocument,
-      BlueHighlight,
-      PurpleHighlight,
-      PinkHighlight,
+      CommentHighlight,
       StarterKit.configure({
+        history: true,
         heading: {
           levels: [1, 2, 3, 4, 5, 6],
           HTMLAttributes: {
@@ -114,6 +105,9 @@ export const useCustomEditor = (
           },
         },
       }),
+      BlueHighlight,
+      PurpleHighlight,
+      PinkHighlight,
       Placeholder.configure({
         placeholder: EDITOR_CONFIG.placeholder,
       }),
