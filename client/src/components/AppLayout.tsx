@@ -57,16 +57,12 @@ export default function AppLayout() {
   };
 
   // Handler for editing a comment
-  const handleEditComment = (commentId: string) => {
-    if (!activeNote) return;
-
-    const comment = activeNote.comments.find(c => c.id === commentId);
-    if (!comment) return;
-
-    setSelectedTextInfo({ text: '', spanId: comment.target_span_id });
+  const handleEditComment = (commentId: string, selectedText?: string) => {
     setEditingCommentId(commentId);
+    if (selectedText) {
+      setSelectedTextInfo({ text: selectedText, spanId: '' });
+    }
     setShowCommentModal(true);
-    setShowContextMenu(false);
   };
 
   // Handler for applying a highlight

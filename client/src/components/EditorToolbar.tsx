@@ -3,7 +3,8 @@ import {
   Bold, Italic, Underline, Type, List, 
   ListOrdered, Heading2, Heading3, 
   Highlighter, CheckSquare, Paintbrush,
-  Eraser, MessageSquare, Pencil, X
+  Eraser, MessageSquare, Pencil, X,
+  MessageSquarePlus, MessageSquareText
 } from 'lucide-react';
 import { HIGHLIGHT_COLORS } from '@/lib/constants';
 
@@ -94,25 +95,6 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
 
       <div className="w-px h-4 bg-zinc-800 mx-1" />
 
-      <button
-        onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
-        className="p-1.5 rounded hover:bg-zinc-800"
-        title="Clear Formatting"
-      >
-        <Eraser className="w-4 h-4" />
-      </button>
-
-      <button
-        onClick={() => {
-          const color = editor.getAttributes('textStyle').color || '#ffffff';
-          editor.chain().focus().setColor(color).run();
-        }}
-        className="p-1.5 rounded hover:bg-zinc-800"
-        title="Format Painter"
-      >
-        <Paintbrush className="w-4 h-4" />
-      </button>
-
       <input
         type="color"
         onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
@@ -126,10 +108,29 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         title="Text Color"
       >
         <div 
-          className="w-4 h-4 rounded-full" 
+          className="w-3 h-3 rounded-full" 
           style={{ backgroundColor: editor.getAttributes('textStyle').color || '#ffffff' }}
         />
       </label>
+
+      <button
+        onClick={() => {
+          const color = editor.getAttributes('textStyle').color || '#ffffff';
+          editor.chain().focus().setColor(color).run();
+        }}
+        className="p-1.5 rounded hover:bg-zinc-800"
+        title="Format Painter"
+      >
+        <Paintbrush className="w-4 h-4" />
+      </button>
+
+      <button
+        onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
+        className="p-1.5 rounded hover:bg-zinc-800"
+        title="Clear Formatting"
+      >
+        <Eraser className="w-4 h-4" />
+      </button>
 
       <div className="w-px h-4 bg-zinc-800 mx-1" />
 
