@@ -127,15 +127,15 @@
   }
 
   .highlight-blue {
-    @apply bg-[hsl(var(--highlight-blue))];
+    @apply bg-blue-600/40 text-white font-medium;
   }
 
   .highlight-purple {
-    @apply bg-[hsl(var(--highlight-purple))];
+    @apply bg-purple-600/40 text-white font-medium;
   }
 
   .highlight-pink {
-    @apply bg-[hsl(var(--highlight-pink))];
+    @apply bg-pink-600/40 text-white font-medium;
   }
 
   /* Custom scrollbar */
