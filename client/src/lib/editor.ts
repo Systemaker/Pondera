@@ -61,7 +61,7 @@ export const useCustomEditor = (
     extensions: [
       CommentHighlight,
       Underline,
-      StarterKit.configure({
+      CustomDocument.configure({
         history: true,
         heading: {
           levels: [1, 2, 3, 4, 5, 6],
