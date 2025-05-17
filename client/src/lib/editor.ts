@@ -114,11 +114,6 @@ export const useCustomEditor = (
           },
         },
       }),
-      CustomHighlight.configure({
-        multicolor: true,
-        keepOnSplit: false,
-        inclusive: false,
-      }),
       Placeholder.configure({
         placeholder: EDITOR_CONFIG.placeholder,
       }),
@@ -178,15 +173,15 @@ export const applyHighlight = (editor: Editor | null, colorClass: string) => {
 
   const { state, view } = editor;
   const { from, to } = state.selection;
-  
+
   if (from === to) return null; // No selection
-  
+
   // Generate a unique ID for this highlight
   const spanId = `${SPAN_ID_PREFIX.HIGHLIGHT}${uuidv4()}`;
-  
+
   // Apply the highlight with the unique ID and color class
   editor.chain().focus().toggleHighlight({ color: colorClass }).run();
-  
+
   // Return the ID for reference
   return spanId;
 };
@@ -197,17 +192,17 @@ export const applyCommentSpan = (editor: Editor | null) => {
 
   const { state } = editor;
   const { from, to } = state.selection;
-  
+
   if (from === to) return null;
-  
+
   const spanId = `${SPAN_ID_PREFIX.COMMENT}${uuidv4()}`;
   const selectedText = state.doc.textBetween(from, to);
-  
+
   editor.chain()
     .focus()
     .setMark('comment-highlight', { 'data-comment-id': spanId })
     .run();
-  
+
   return { spanId, selectedText };
 };
 
