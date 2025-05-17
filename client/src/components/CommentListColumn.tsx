@@ -41,12 +41,14 @@ export default function CommentListColumn({ onEditComment }: CommentListColumnPr
   // Find the comment element and scroll it into view
   const commentElement = document.querySelector(`[data-comment-id="${comment.target_span_id}"]`);
   if (commentElement) {
+    const selectedText = commentElement.textContent;
     commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     // Add a temporary highlight effect
     commentElement.classList.add('flash-highlight');
     setTimeout(() => commentElement.classList.remove('flash-highlight'), 2000);
+    
+    onEditComment(comment.id);
   }
-  onEditComment(comment.id);
 }}
             >
               <div className="flex justify-between items-start mb-1.5">

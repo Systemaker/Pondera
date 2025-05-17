@@ -1,12 +1,9 @@
-
 import { Editor } from '@tiptap/react';
 import { 
   Bold, Italic, Underline, Type, List, 
   ListOrdered, Heading2, Heading3, 
   Highlighter, CheckSquare, Paintbrush,
-  Eraser, Type as FontColorIcon,
-  MessageSquarePlus, MessageSquareText,
-  X
+  Eraser, MessageSquare, Pencil, X
 } from 'lucide-react';
 import { HIGHLIGHT_COLORS } from '@/lib/constants';
 
@@ -26,7 +23,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <Bold className="w-3 h-3" />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
         className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('italic') ? 'bg-zinc-800' : ''}`}
@@ -34,7 +31,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <Italic className="w-4 h-4" />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('underline') ? 'bg-zinc-800' : ''}`}
@@ -42,9 +39,9 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <Underline className="w-4 h-4" />
       </button>
-      
+
       <div className="w-px h-4 bg-zinc-800 mx-1" />
-      
+
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('heading', { level: 1 }) ? 'bg-zinc-800' : ''}`}
@@ -52,7 +49,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <Type className="w-4 h-4" />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('heading', { level: 2 }) ? 'bg-zinc-800' : ''}`}
@@ -60,7 +57,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <Heading2 className="w-4 h-4" />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('heading', { level: 3 }) ? 'bg-zinc-800' : ''}`}
@@ -68,9 +65,9 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <Heading3 className="w-4 h-4" />
       </button>
-      
+
       <div className="w-px h-4 bg-zinc-800 mx-1" />
-      
+
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('bulletList') ? 'bg-zinc-800' : ''}`}
@@ -78,7 +75,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <List className="w-4 h-4" />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={`p-1.5 rounded hover:bg-zinc-800 ${editor.isActive('orderedList') ? 'bg-zinc-800' : ''}`}
@@ -94,7 +91,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <CheckSquare className="w-4 h-4" />
       </button>
-      
+
       <div className="w-px h-4 bg-zinc-800 mx-1" />
 
       <button
@@ -133,7 +130,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           style={{ backgroundColor: editor.getAttributes('textStyle').color || '#ffffff' }}
         />
       </label>
-      
+
       <div className="w-px h-4 bg-zinc-800 mx-1" />
 
       <button
@@ -148,7 +145,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         className="p-1.5 rounded hover:bg-zinc-800"
         title="Add Comment"
       >
-        <MessageSquarePlus className="w-4 h-4" />
+        <MessageSquare className="w-4 h-4" />
       </button>
 
       <button
@@ -162,7 +159,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         className="p-1.5 rounded hover:bg-zinc-800"
         title="Edit Comment"
       >
-        <MessageSquareText className="w-4 h-4" />
+        <Pencil className="w-4 h-4" />
       </button>
 
       <button
@@ -177,7 +174,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       </button>
 
       <div className="w-px h-4 bg-zinc-800 mx-1" />
-      
+
       {HIGHLIGHT_COLORS.map((color) => (
         <button
           key={color.class}
