@@ -51,7 +51,9 @@ export default function NoteListColumn() {
   return (
     <div className="w-64 min-w-[200px] flex-shrink-0 border-r border-zinc-800 flex flex-col h-full overflow-hidden">
       <div className="p-4 flex justify-between items-center border-b border-zinc-800">
-        <h1 className="text-lg font-semibold text-gray-400 truncate">Notes</h1>
+        <h1 className="text-lg font-semibold text-gray-400 truncate flex items-center gap-2">
+          <span role="img" aria-label="notes">📝</span> Notes
+        </h1>
         <div className="flex-shrink-0 flex space-x-2">
           <button 
             onClick={createNote} 

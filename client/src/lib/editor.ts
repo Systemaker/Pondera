@@ -146,10 +146,13 @@ export const applyHighlight = (editor: Editor | null, colorClass: string) => {
 
 // Apply a comment span to selected text
 export const applyCommentSpan = (editor: Editor | null) => {
-  if (!editor) return null;
+  if (!editor || editor.state.selection.empty) return null;
 
   const { state } = editor;
   const { from, to } = state.selection;
+  
+  // Ensure there is actual text selected
+  if (from === to) return null;
   
   if (from === to) return null; // No selection
   

@@ -16,7 +16,9 @@ export default function CommentListColumn({ onEditComment }: CommentListColumnPr
   return (
     <div className="w-64 min-w-[200px] flex-shrink-0 border-l border-zinc-800 flex flex-col h-full overflow-hidden">
       <div className="p-4 border-b border-zinc-800">
-        <h1 className="text-lg font-semibold text-gray-400 truncate">Comments</h1>
+        <h1 className="text-lg font-semibold text-gray-400 truncate flex items-center gap-2">
+          Comments <span role="img" aria-label="comments">💭</span>
+        </h1>
       </div>
       
       <div className="overflow-y-auto flex-1 py-2">
@@ -33,7 +35,7 @@ export default function CommentListColumn({ onEditComment }: CommentListColumnPr
           sortedComments.map((comment) => (
             <div
               key={comment.id}
-              className={`px-4 py-3 hover:bg-zinc-900 border-l-2 ${getPriorityDotClass(comment.priority)} cursor-pointer transition-all`}
+              className={`px-4 py-3 hover:bg-zinc-900/50 border-l-2 ${getPriorityDotClass(comment.priority)} cursor-pointer transition-all bg-zinc-900`}
               onClick={() => onEditComment(comment.id)}
             >
               <div className="flex justify-between items-start mb-1.5">
