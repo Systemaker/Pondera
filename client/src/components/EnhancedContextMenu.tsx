@@ -33,33 +33,33 @@ export default function EnhancedContextMenu({
 }: EnhancedContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const { notes } = useNotes();
-  
+
   // Get editor commands
   const { applyFormat, applyHighlightColor, getSelectedText } = useEditorCommands(editor);
-  
+
   // Adjust menu position if it goes off screen
   useEffect(() => {
     if (!menuRef.current) return;
-    
+
     const menu = menuRef.current;
     const rect = menu.getBoundingClientRect();
-    
+
     // Check if menu is outside viewport
     if (rect.right > window.innerWidth) {
       menu.style.left = `${window.innerWidth - rect.width - 10}px`;
     }
-    
+
     if (rect.bottom > window.innerHeight) {
       menu.style.top = `${window.innerHeight - rect.height - 10}px`;
     }
   }, [position]);
-  
+
   // Handle formatting
   const handleFormat = (e: MouseEvent, formatType: string) => {
     e.stopPropagation();
     applyFormat(formatType);
   };
-  
+
   // Handle highlight application
   const handleHighlight = (e: MouseEvent, colorClass: string) => {
     e.stopPropagation();
@@ -68,7 +68,7 @@ export default function EnhancedContextMenu({
       onApplyHighlight(colorClass, spanId);
     }
   };
-  
+
   // Handle add comment
   const handleAddComment = (e: MouseEvent) => {
     e.stopPropagation();
@@ -77,7 +77,7 @@ export default function EnhancedContextMenu({
       onAddComment(selection.spanId, selection.selectedText);
     }
   };
-  
+
   // Check if the current selection has a comment
   const hasComment = () => {
     // This is a placeholder - in a real implementation, we would check if 
@@ -163,7 +163,7 @@ export default function EnhancedContextMenu({
           <span>Task List</span>
         </button>
       </div>
-      
+
       {/* Comments Section */}
       <div className="border-b border-zinc-700 px-1 py-1">
         <p className="text-xs font-medium text-gray-400 px-2 py-1">Comments</p>
@@ -187,7 +187,7 @@ export default function EnhancedContextMenu({
           <span>Edit Comment</span>
         </button>
       </div>
-      
+
       {/* Highlights Section */}
       <div className="px-1 py-1">
         <p className="text-xs font-medium text-gray-400 px-2 py-1">Highlights</p>
