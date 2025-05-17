@@ -92,6 +92,7 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
     <div className="flex-1 flex flex-col h-full bg-black overflow-hidden">
       {/* Title input - separate from content */}
       <div className="border-b border-zinc-800 p-4 text-center">
+        <EditorToolbar editor={editor} />
         <input
           type="text"
           value={activeNote?.title || ""}

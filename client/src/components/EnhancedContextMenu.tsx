@@ -132,6 +132,13 @@ export default function EnhancedContextMenu({
         </button>
         <button 
           className="w-full text-left px-2 py-1.5 text-sm hover:bg-zinc-700 rounded flex items-center space-x-2"
+          onClick={(e) => handleFormat(e, 'underline')}
+        >
+          <Underline className="w-3.5 h-3.5" />
+          <span>Underline</span>
+        </button>
+        <button 
+          className="w-full text-left px-2 py-1.5 text-sm hover:bg-zinc-700 rounded flex items-center space-x-2"
           onClick={(e) => handleFormat(e, 'bulletList')}
         >
           <List className="w-3.5 h-3.5" />

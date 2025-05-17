@@ -32,22 +32,18 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Custom extensions
 // Custom highlight extensions for different colors
+import Underline from '@tiptap/extension-underline';
+
 const BlueHighlight = Highlight.configure({
   HTMLAttributes: { class: 'highlight-blue' },
-  multicolor: true,
-  types: ['highlight-blue'],
 });
 
 const PurpleHighlight = Highlight.configure({
   HTMLAttributes: { class: 'highlight-purple' },
-  multicolor: true,
-  types: ['highlight-purple'],
 });
 
 const PinkHighlight = Highlight.configure({
   HTMLAttributes: { class: 'highlight-pink' },
-  multicolor: true,
-  types: ['highlight-pink'],
 });
 
 const CustomDocument = StarterKit.configure({
@@ -64,6 +60,7 @@ export const useCustomEditor = (
   return useEditor({
     extensions: [
       CommentHighlight,
+      Underline,
       StarterKit.configure({
         history: true,
         heading: {
