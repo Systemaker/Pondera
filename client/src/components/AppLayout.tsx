@@ -33,17 +33,29 @@ export default function AppLayout() {
     
     if (!editorRef.current) return;
     
-    // If no text is selected, select the word at cursor position
+    // If no text is selected, select the entire line at cursor position
     if (!selectedText || selectedText.trim() === "") {
       const { view } = editorRef.current;
-      const coords = view.posAtCoords({ left: e.clientX, top: e.clientY });
+      const pos = view.posAtCoords({ left: e.clientX, top: e.clientY });
       
-      if (coords) {
-        const $pos = view.state.doc.resolve(coords);
-        const wordRange = view.state.selection.constructor.word($pos);
-        const word = view.state.doc.textBetween(wordRange.from, wordRange.to);
+      if (typeof pos === 'number') {
+        const $pos = view.state.doc.resolve(pos);
+        const line = $pos.parent;
+        const lineStart = $pos.before();
+        const lineEnd = $pos.after();
         
-        if (word) {
+        if (lineStart !== lineEnd) {
+          view.dispatch(view.state.tr.setSelection(
+            view.state.selection.constructor.create(
+              view.state.doc,
+              lineStart,
+              lineEnd
+            )
+          ));
+          selectedText = view.state.doc.textBetween(lineStart, lineEnd);
+        }
+        
+        if (selectedText) {
           view.dispatch(view.state.tr.setSelection(
             view.state.selection.constructor.create(view.state.doc, wordRange.from, wordRange.to)
           ));
