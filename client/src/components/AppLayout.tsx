@@ -30,10 +30,32 @@ export default function AppLayout() {
   // Handler for right-click in the editor
   const handleContextMenu = (e: React.MouseEvent, selectedText: string) => {
     e.preventDefault();
-    if (!selectedText || selectedText.trim() === "") return;
+    
+    if (!editorRef.current) return;
+    
+    // If no text is selected, select the word at cursor position
+    if (!selectedText || selectedText.trim() === "") {
+      const { view } = editorRef.current;
+      const pos = view.posAtCoords({ left: e.clientX, top: e.clientY });
+      
+      if (pos !== null) {
+        const $pos = view.state.doc.resolve(pos);
+        const wordRange = view.state.wordRange($pos.pos);
+        const word = view.state.doc.textBetween(wordRange.from, wordRange.to);
+        
+        if (word) {
+          view.dispatch(view.state.tr.setSelection(
+            view.state.selection.constructor.create(view.state.doc, wordRange.from, wordRange.to)
+          ));
+          selectedText = word;
+        }
+      }
+    }
 
-    setContextMenuPosition({ x: e.clientX, y: e.clientY });
-    setShowContextMenu(true);
+    if (selectedText && selectedText.trim() !== "") {
+      setContextMenuPosition({ x: e.clientX, y: e.clientY });
+      setShowContextMenu(true);
+    }
   };
 
   // Close the context menu when clicking outside

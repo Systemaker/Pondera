@@ -15,8 +15,71 @@ interface EditorToolbarProps {
 export default function EditorToolbar({ editor }: EditorToolbarProps) {
   if (!editor) return null;
 
+  const handleAddComment = () => {
+    const selection = editor.state.selection;
+    const text = editor.state.doc.textBetween(selection.from, selection.to);
+    if (text) {
+      const spanId = `comment-span-${Date.now()}`;
+      editor.chain().focus().setMark('comment-highlight', { id: spanId }).run();
+      return { text, spanId };
+    }
+    return null;
+  };
+
+  const handleEditComment = () => {
+    const selection = editor.state.selection;
+    if (!selection.empty) {
+      const text = editor.state.doc.textBetween(selection.from, selection.to);
+      const marks = editor.state.doc.rangeHasMark(selection.from, selection.to, editor.schema.marks['comment-highlight']);
+      if (marks) {
+        const commentId = marks.attrs.id;
+        return { text, commentId };
+      }
+    }
+    return null;
+  };
+
   return (
     <div className="flex items-center gap-0.5 flex-wrap py-1 justify-center">
+      <input
+        type="color"
+        onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
+        value={editor.getAttributes('textStyle').color || '#ffffff'}
+        className="w-6 h-6 opacity-0 absolute"
+        id="colorPicker"
+      />
+      <label 
+        htmlFor="colorPicker" 
+        className="p-1.5 rounded hover:bg-zinc-800 cursor-pointer flex items-center"
+        title="Text Color"
+      >
+        <div 
+          className="w-3 h-3 rounded-full" 
+          style={{ backgroundColor: editor.getAttributes('textStyle').color || '#ffffff' }}
+        />
+      </label>
+
+      <button
+        onClick={() => {
+          const color = editor.getAttributes('textStyle').color || '#ffffff';
+          editor.chain().focus().setColor(color).run();
+        }}
+        className="p-1.5 rounded hover:bg-zinc-800"
+        title="Format Painter"
+      >
+        <Paintbrush className="w-4 h-4" />
+      </button>
+
+      <button
+        onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
+        className="p-1.5 rounded hover:bg-zinc-800"
+        title="Clear Formatting"
+      >
+        <Eraser className="w-4 h-4" />
+      </button>
+
+      <div className="w-px h-4 bg-zinc-800 mx-1" />
+
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={`p-1 rounded hover:bg-zinc-800/50 ${editor.isActive('bold') ? 'bg-zinc-800/50' : ''}`}
