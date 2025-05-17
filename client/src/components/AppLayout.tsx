@@ -16,22 +16,22 @@ export default function AppLayout() {
   const [selectedTextInfo, setSelectedTextInfo] = useState<{ text: string; spanId: string } | null>(null);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const editorRef = useRef<Editor | null>(null);
-  
+
   // Estado para controlar a visibilidade das colunas laterais
   const [showLeftColumn, setShowLeftColumn] = useState(true);
   const [showRightColumn, setShowRightColumn] = useState(true);
-  
+
   // Referências para arrastar e redimensionar as colunas
   const leftColumnRef = useRef<HTMLDivElement>(null);
   const rightColumnRef = useRef<HTMLDivElement>(null);
   const leftResizeRef = useRef<HTMLDivElement>(null);
   const rightResizeRef = useRef<HTMLDivElement>(null);
-  
+
   // Handler for right-click in the editor
   const handleContextMenu = (e: React.MouseEvent, selectedText: string) => {
     e.preventDefault();
     if (!selectedText || selectedText.trim() === "") return;
-    
+
     setContextMenuPosition({ x: e.clientX, y: e.clientY });
     setShowContextMenu(true);
   };
@@ -41,7 +41,7 @@ export default function AppLayout() {
     const handleClickOutside = () => {
       setShowContextMenu(false);
     };
-    
+
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
@@ -59,10 +59,10 @@ export default function AppLayout() {
   // Handler for editing a comment
   const handleEditComment = (commentId: string) => {
     if (!activeNote) return;
-    
+
     const comment = activeNote.comments.find(c => c.id === commentId);
     if (!comment) return;
-    
+
     setSelectedTextInfo({ text: '', spanId: comment.target_span_id });
     setEditingCommentId(commentId);
     setShowCommentModal(true);
@@ -72,14 +72,14 @@ export default function AppLayout() {
   // Handler for applying a highlight
   const handleApplyHighlight = (colorClass: string, spanId: string) => {
     if (!activeNoteId) return;
-    
+
     // Add the highlight to the note's data
     if (activeNote) {
       const newHighlight = {
         target_span_id: spanId,
         color_class: colorClass as any,
       };
-      
+
       updateNote(activeNoteId, {
         highlights: [...activeNote.highlights, {
           ...newHighlight,
@@ -88,7 +88,7 @@ export default function AppLayout() {
         }]
       });
     }
-    
+
     setShowContextMenu(false);
   };
 
@@ -111,7 +111,7 @@ export default function AppLayout() {
         startX = e.clientX;
         startWidth = rightColumnRef.current?.offsetWidth || 0;
       }
-      
+
       // Adicionar classe ao body para indicar que está redimensionando
       document.body.classList.add('resizing');
     };
@@ -137,7 +137,7 @@ export default function AppLayout() {
     const handleMouseUp = () => {
       isDraggingLeft = false;
       isDraggingRight = false;
-      
+
       // Remover classe do body
       document.body.classList.remove('resizing');
     };
@@ -145,19 +145,19 @@ export default function AppLayout() {
     // Event listeners para os elementos de redimensionamento
     const handleLeftMouseDown = (e: MouseEvent) => handleMouseDown(e, true);
     const handleRightMouseDown = (e: MouseEvent) => handleMouseDown(e, false);
-    
+
     // Adicionar event listeners
     const leftResizeElement = leftResizeRef.current;
     const rightResizeElement = rightResizeRef.current;
-    
+
     if (leftResizeElement) {
       leftResizeElement.addEventListener('mousedown', handleLeftMouseDown);
     }
-    
+
     if (rightResizeElement) {
       rightResizeElement.addEventListener('mousedown', handleRightMouseDown);
     }
-    
+
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
 
@@ -166,11 +166,11 @@ export default function AppLayout() {
       if (leftResizeElement) {
         leftResizeElement.removeEventListener('mousedown', handleLeftMouseDown);
       }
-      
+
       if (rightResizeElement) {
         rightResizeElement.removeEventListener('mousedown', handleRightMouseDown);
       }
-      
+
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
@@ -198,7 +198,7 @@ export default function AppLayout() {
           <ChevronRight size={16} />
         </button>
       )}
-      
+
       {/* Coluna do editor (centro) */}
       <div className="flex-1 flex flex-col relative">
         {showLeftColumn && (
@@ -210,12 +210,12 @@ export default function AppLayout() {
             <ChevronLeft size={16} />
           </button>
         )}
-        
+
         <EditorColumn 
           onContextMenu={handleContextMenu}
           setEditorRef={(editor) => editorRef.current = editor}
         />
-        
+
         {showRightColumn && (
           <button 
             onClick={() => setShowRightColumn(false)}
@@ -226,7 +226,7 @@ export default function AppLayout() {
           </button>
         )}
       </div>
-      
+
       {/* Coluna de comentários (direita) */}
       {showRightColumn ? (
         <>
@@ -249,7 +249,7 @@ export default function AppLayout() {
           <ChevronLeft size={16} />
         </button>
       )}
-      
+
       {showContextMenu && (
         <EnhancedContextMenu
           position={contextMenuPosition}
@@ -260,7 +260,7 @@ export default function AppLayout() {
           editor={editorRef.current}
         />
       )}
-      
+
       {showCommentModal && (
         <CommentFormModal
           selectedText={selectedTextInfo?.text || ''}

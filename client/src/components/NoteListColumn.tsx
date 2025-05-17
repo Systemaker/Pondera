@@ -30,7 +30,7 @@ export default function NoteListColumn() {
     exportNoteToMarkdown,
     getFormattedDate
   } = useNotes();
-  
+
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState<string | null>(null);
 
@@ -48,6 +48,15 @@ export default function NoteListColumn() {
     setDeleteConfirmOpen(false);
   };
 
+  const handleCreateNote = () => {
+    createNote();
+  };
+
+  const handleOpenSettings = () => {
+    // Handle settings logic here
+    console.log("Settings opened");
+  };
+
   return (
     <div className="w-64 min-w-[200px] flex-shrink-0 border-r border-zinc-800 flex flex-col h-full overflow-hidden">
       <div className="p-4 flex items-center gap-3 border-b border-zinc-800">
@@ -55,22 +64,25 @@ export default function NoteListColumn() {
           <FileText className="w-4 h-4" /> Notes
         </h1>
         <div className="flex items-center gap-1">
-          <button 
-            onClick={createNote} 
-            className="p-1.5 rounded-md bg-zinc-800/50 hover:bg-zinc-700 transition-colors text-gray-300" 
-            title="Nova Nota"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 border border-white/10 hover:border-white/20"
+            onClick={handleCreateNote}
           >
-            <Plus className="w-4 h-4" />
-          </button>
-          <button 
-            className="p-1.5 rounded-md bg-zinc-800/50 hover:bg-zinc-700 transition-colors text-gray-300" 
-            title="Configurações"
+            <Plus className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 border border-white/10 hover:border-white/20"
+            onClick={handleOpenSettings}
           >
-            <Settings className="w-4 h-4" />
-          </button>
+            <Settings className="h-4 w-4" />
+          </Button>
         </div>
       </div>
-      
+
       <div className="overflow-y-auto flex-1 py-2">
         {notes.length === 0 ? (
           <div className="px-4 py-8 text-center text-gray-500">

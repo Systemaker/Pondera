@@ -89,8 +89,14 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       {HIGHLIGHT_COLORS.map((color) => (
         <button
           key={color.class}
-          onClick={() => editor.chain().focus().toggleHighlight({ class: color.class }).run()}
-          className={`p-1.5 rounded hover:bg-zinc-800 flex items-center gap-1 ${
+          onClick={() => {
+            if (editor.isActive('highlight', { class: color.class })) {
+              editor.chain().focus().unsetHighlight().run();
+            } else {
+              editor.chain().focus().setHighlight({ class: color.class }).run();
+            }
+          }}
+          className={`p-1 rounded hover:bg-zinc-800/50 flex items-center gap-1 ${
             editor.isActive('highlight', { class: color.class }) ? 'bg-zinc-800' : ''
           }`}
           title={`${color.name} Highlight`}

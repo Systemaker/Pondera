@@ -105,9 +105,12 @@ export const useCustomEditor = (
           },
         },
       }),
-      BlueHighlight,
-      PurpleHighlight,
-      PinkHighlight,
+      Highlight.configure({
+        multicolor: true,
+        HTMLAttributes: {
+          class: '',
+        },
+      }),
       Placeholder.configure({
         placeholder: EDITOR_CONFIG.placeholder,
       }),
