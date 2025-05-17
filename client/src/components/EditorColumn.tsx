@@ -28,7 +28,7 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
     exportNoteToDocx 
   } = useNotes();
   const [wordCount, setWordCount] = useState(0);
-
+  
   // Initialize editor with content from active note
   const editor = useCustomEditor(
     activeNote?.content_html || '<p></p>',
@@ -38,14 +38,14 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
       }
     }
   );
-
+  
   // Pass editor reference to parent component if needed
   useEffect(() => {
     if (setEditorRef) {
       setEditorRef(editor);
     }
   }, [editor, setEditorRef]);
-
+  
   // Update editor content when active note changes
   useEffect(() => {
     if (editor && activeNote) {
@@ -55,26 +55,26 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
       }
     }
   }, [editor, activeNote]);
-
+  
   // Update word count when content changes
   useEffect(() => {
     if (activeNote) {
       setWordCount(countWords(activeNote.content_html));
     }
   }, [activeNote]);
-
+  
   // Handle right-click (context menu)
   const handleEditorContextMenu = useCallback((e: React.MouseEvent) => {
     if (!editor) return;
-
+    
     const selection = editor.state.selection;
     const selectedText = selection.empty 
       ? "" 
       : editor.state.doc.textBetween(selection.from, selection.to);
-
+    
     onContextMenu(e, selectedText);
   }, [editor, onContextMenu]);
-
+  
   // Placeholder to show when no note is selected
   if (!activeNote) {
     return (
@@ -105,7 +105,7 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
           placeholder="Título da Nota"
         />
       </div>
-
+      
       <div 
         className="flex-1 overflow-y-auto p-6"
         onContextMenu={handleEditorContextMenu}
@@ -119,7 +119,7 @@ export default function EditorColumn({ onContextMenu, setEditorRef }: EditorColu
           />
         </div>
       </div>
-
+      
       <div className="border-t border-zinc-800 py-2 px-4 flex justify-between items-center text-xs text-gray-400">
         <div>
           <span>Last edited: {getFormattedDate(activeNote.updated_at)}</span>
