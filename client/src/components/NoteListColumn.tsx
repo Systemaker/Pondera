@@ -1,5 +1,5 @@
 import { useNotes } from "@/context/NotesContext";
-import { Plus, Settings, Pin, MoreVertical, Download, Trash2 } from "lucide-react";
+import { Plus, Settings, Pin, MoreVertical, Download, Trash2, FileText } from "lucide-react";
 import { useState } from "react";
 import {
   DropdownMenu,
