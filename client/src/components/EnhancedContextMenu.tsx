@@ -100,6 +100,7 @@ export default function EnhancedContextMenu({
         >
           <Type className="w-3.5 h-3.5" />
           <span>Heading 1</span>
+          <span className="ml-auto text-xs text-gray-500">⌘1</span>
         </button>
         <button 
           className="w-full text-left px-2 py-1.5 text-sm hover:bg-zinc-700 rounded flex items-center space-x-2"

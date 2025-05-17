@@ -31,11 +31,20 @@ import { EDITOR_CONFIG, SPAN_ID_PREFIX } from './constants';
 import { v4 as uuidv4 } from 'uuid';
 
 // Custom extensions
-const CustomHighlight = Highlight.configure({
+// Custom highlight extensions for different colors
+const BlueHighlight = Highlight.configure({
   multicolor: true,
-  HTMLAttributes: {
-    class: 'highlight-blue',
-  },
+  HTMLAttributes: { class: 'highlight-blue' },
+});
+
+const PurpleHighlight = Highlight.configure({
+  multicolor: true,
+  HTMLAttributes: { class: 'highlight-purple' },
+});
+
+const PinkHighlight = Highlight.configure({
+  multicolor: true,
+  HTMLAttributes: { class: 'highlight-pink' },
 });
 
 const CustomDocument = StarterKit.configure({
@@ -51,8 +60,32 @@ export const useCustomEditor = (
 ) => {
   return useEditor({
     extensions: [
-      CommentHighlight,
+      CommentHighlight.configure({
+        addKeyboardShortcuts() {
+          return {
+            'Mod-Alt-c': () => this.editor.commands.toggleComment(),
+          }
+        }
+      }),
       CustomDocument.configure({
+        addKeyboardShortcuts() {
+          return {
+            'Mod-1': () => this.editor.commands.toggleHeading({ level: 1 }),
+            'Mod-2': () => this.editor.commands.toggleHeading({ level: 2 }),
+            'Mod-3': () => this.editor.commands.toggleHeading({ level: 3 }),
+            'Mod-b': () => this.editor.commands.toggleBold(),
+            'Mod-i': () => this.editor.commands.toggleItalic(),
+            'Mod-l': () => this.editor.commands.toggleBulletList(),
+            'Mod-Shift-7': () => this.editor.commands.toggleOrderedList(),
+            'Alt-b': () => this.editor.commands.toggleHighlight({ color: 'highlight-blue' }),
+            'Alt-p': () => this.editor.commands.toggleHighlight({ color: 'highlight-purple' }),
+            'Alt-k': () => this.editor.commands.toggleHighlight({ color: 'highlight-pink' }),
+          }
+        }
+      }),
+      BlueHighlight,
+      PurpleHighlight,
+      PinkHighlight,
         // Melhorar suporte a atalhos Markdown
         heading: {
           levels: [1, 2, 3, 4, 5, 6],
