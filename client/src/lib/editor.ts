@@ -2,9 +2,11 @@ import { Editor, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
 import Placeholder from '@tiptap/extension-placeholder';
-import { Mark } from '@tiptap/core';
+import { Mark, getMarkRange } from '@tiptap/core';
 
 const CommentHighlight = Mark.create({
+  keepOnSplit: false,
+  inclusive: false,
   name: 'comment-highlight',
   addAttributes() {
     return {
@@ -94,7 +96,11 @@ export const useCustomEditor = (
           },
         },
       }),
-      CustomHighlight,
+      CustomHighlight.configure({
+        multicolor: true,
+        keepOnSplit: false,
+        inclusive: false,
+      }),
       Placeholder.configure({
         placeholder: EDITOR_CONFIG.placeholder,
       }),
