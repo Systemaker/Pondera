@@ -3,6 +3,7 @@ import { EditorContent, Editor } from "@tiptap/react";
 import { useNotes } from "@/context/NotesContext";
 import { useCustomEditor } from "@/lib/editor";
 import { Download, FileText, FileType, File } from "lucide-react";
+import EditorToolbar from "./EditorToolbar";
 import { countWords } from "@/lib/utils";
 import {
   DropdownMenu,
