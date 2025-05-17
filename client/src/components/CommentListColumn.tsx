@@ -47,8 +47,11 @@ export default function CommentListColumn({ onEditComment }: CommentListColumnPr
     commentElement.classList.add('flash-highlight');
     setTimeout(() => commentElement.classList.remove('flash-highlight'), 2000);
     
-    // Pass both comment ID and selected text
-    onEditComment(comment.id, selectedText);
+    // Pass both comment ID and trigger the edit modal
+    onEditComment(comment.id);
+    setShowCommentModal(true);
+    setSelectedTextInfo({ text: selectedText, spanId: comment.target_span_id });
+    setEditingCommentId(comment.id);
   }
 }}
             >

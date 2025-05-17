@@ -30,20 +30,20 @@ export default function AppLayout() {
   // Handler for right-click in the editor
   const handleContextMenu = (e: React.MouseEvent, selectedText: string) => {
     e.preventDefault();
-    
+
     if (!editorRef.current) return;
-    
+
     // If no text is selected, select the entire line at cursor position
     if (!selectedText || selectedText.trim() === "") {
       const { view } = editorRef.current;
       const pos = view.posAtCoords({ left: e.clientX, top: e.clientY });
-      
+
       if (typeof pos === 'number') {
         const $pos = view.state.doc.resolve(pos);
         const line = $pos.parent;
         const lineStart = $pos.before();
         const lineEnd = $pos.after();
-        
+
         if (lineStart !== lineEnd) {
           view.dispatch(view.state.tr.setSelection(
             view.state.selection.constructor.create(
@@ -54,7 +54,7 @@ export default function AppLayout() {
           ));
           selectedText = view.state.doc.textBetween(lineStart, lineEnd);
         }
-        
+
         if (selectedText) {
           view.dispatch(view.state.tr.setSelection(
             view.state.selection.constructor.create(view.state.doc, wordRange.from, wordRange.to)
@@ -205,6 +205,25 @@ export default function AppLayout() {
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [showLeftColumn, showRightColumn]);
+
+  // Handler for clicking on comment spans
+  useEffect(() => {
+    const handleCommentSpanClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.hasAttribute('data-comment-id')) {
+        const commentId = target.getAttribute('data-comment-id');
+        const selectedText = target.textContent || '';
+        if (commentId) {
+          setShowCommentModal(true);
+          setSelectedTextInfo({ text: selectedText, spanId: commentId });
+          setEditingCommentId(commentId);
+        }
+      }
+    };
+
+    document.addEventListener('click', handleCommentSpanClick);
+    return () => document.removeEventListener('click', handleCommentSpanClick);
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden bg-black text-gray-200">
