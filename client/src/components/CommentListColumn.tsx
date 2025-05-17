@@ -17,7 +17,7 @@ export default function CommentListColumn({ onEditComment }: CommentListColumnPr
     <div className="w-64 min-w-[200px] flex-shrink-0 border-l border-zinc-800 flex flex-col h-full overflow-hidden">
       <div className="p-4 border-b border-zinc-800">
         <h1 className="text-lg font-semibold text-gray-400 truncate flex items-center gap-2">
-          Comments <span role="img" aria-label="comments">💭</span>
+          Comments <MessageSquare className="w-4 h-4" />
         </h1>
       </div>
       

@@ -151,19 +151,23 @@ export const applyCommentSpan = (editor: Editor | null) => {
   const { state } = editor;
   const { from, to } = state.selection;
   
-  // Ensure there is actual text selected
   if (from === to) return null;
   
-  if (from === to) return null; // No selection
-  
-  // Generate a unique ID for this comment
   const spanId = `${SPAN_ID_PREFIX.COMMENT}${uuidv4()}`;
-  
-  // Get the selected text
   const selectedText = state.doc.textBetween(from, to);
   
-  // Return the ID and selected text
+  editor.chain()
+    .focus()
+    .setMark('comment-highlight')
+    .run();
+  
   return { spanId, selectedText };
+};
+
+// Function to check if text with comment exists
+export const checkCommentTextExists = (editor: Editor, spanId: string) => {
+  const content = editor.getHTML();
+  return content.includes(`data-comment-id="${spanId}"`);
 };
 
 // Hook to manage editor commands

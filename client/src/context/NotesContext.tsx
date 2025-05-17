@@ -80,7 +80,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         console.error("Failed to parse saved data:", e);
       }
     }
-    
+
     // Default initial state
     return {
       notes: [],
@@ -115,7 +115,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       updated_at: now,
       is_pinned: false
     };
-    
+
     setAppData(prev => ({
       ...prev,
       notes: [newNote, ...prev.notes],
@@ -128,17 +128,21 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setAppData(prev => {
       const updatedNotes = prev.notes.map(note => {
         if (note.id === id) {
-          return {
-            ...note,
-            ...updates,
-            updated_at: new Date().toISOString(),
-            // Apenas atualiza o título se for explicitamente solicitado
-            title: updates.title !== undefined ? updates.title : note.title
+          // Clean up orphaned comments
+          const updatedComments = note.comments.filter(comment => 
+            updates.content_html?.includes(`data-comment-id="${comment.target_span_id}"`)
+          );
+
+          return { 
+            ...note, 
+            ...updates, 
+            comments: updatedComments,
+            updated_at: new Date().toISOString() 
           };
         }
         return note;
       });
-      
+
       return {
         ...prev,
         notes: updatedNotes
@@ -150,13 +154,13 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const deleteNote = (id: string) => {
     setAppData(prev => {
       const updatedNotes = prev.notes.filter(note => note.id !== id);
-      
+
       // If we're deleting the active note, set a new active note
       let newActiveId = prev.active_note_id;
       if (newActiveId === id) {
         newActiveId = updatedNotes.length > 0 ? updatedNotes[0].id : null;
       }
-      
+
       return {
         ...prev,
         notes: updatedNotes,
@@ -178,7 +182,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
         return note;
       });
-      
+
       return {
         ...prev,
         notes: updatedNotes
@@ -205,7 +209,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             created_at: new Date().toISOString(),
             order_in_document: note.comments.length // Simple ordering for now
           };
-          
+
           return {
             ...note,
             comments: [...note.comments, newComment],
@@ -214,7 +218,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
         return note;
       });
-      
+
       return {
         ...prev,
         notes: updatedNotes
@@ -233,7 +237,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             }
             return comment;
           });
-          
+
           return {
             ...note,
             comments: updatedComments,
@@ -242,7 +246,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
         return note;
       });
-      
+
       return {
         ...prev,
         notes: updatedNotes
@@ -263,7 +267,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
         return note;
       });
-      
+
       return {
         ...prev,
         notes: updatedNotes
@@ -281,7 +285,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             id: uuidv4(),
             created_at: new Date().toISOString()
           };
-          
+
           return {
             ...note,
             highlights: [...note.highlights, newHighlight],
@@ -290,7 +294,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
         return note;
       });
-      
+
       return {
         ...prev,
         notes: updatedNotes
@@ -311,7 +315,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
         return note;
       });
-      
+
       return {
         ...prev,
         notes: updatedNotes
@@ -323,7 +327,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const exportNoteToMarkdown = async (noteId: string) => {
     const note = notes.find(note => note.id === noteId);
     if (!note) return;
-    
+
     try {
       // Dynamic import of the turndown library
       const TurndownService = (await import('turndown')).default;
@@ -333,9 +337,9 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         bulletListMarker: '-',
         codeBlockStyle: 'fenced'
       });
-      
+
       const markdown = turndownService.turndown(note.content_html);
-      
+
       // Create a blob and download it
       const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
       const url = URL.createObjectURL(blob);
@@ -346,7 +350,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       toast({
         title: "Exportação concluída",
         description: "Arquivo Markdown gerado com sucesso",
@@ -360,32 +364,32 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       });
     }
   };
-  
+
   // Export note to PDF
   const exportNoteToPDF = async (noteId: string) => {
     const note = notes.find(note => note.id === noteId);
     if (!note) return;
-    
+
     try {
       // Use jsPDF to create a PDF from HTML
       const { jsPDF } = await import('jspdf');
       const doc = new jsPDF();
-      
+
       // Add title
       doc.setFontSize(18);
       doc.text(note.title, 20, 20);
-      
+
       // Add content (simple text extraction for now)
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = note.content_html;
       const text = tempDiv.textContent || tempDiv.innerText || '';
-      
+
       doc.setFontSize(12);
       doc.text(text, 20, 30, { maxWidth: 170 });
-      
+
       // Save the PDF
       doc.save(`${note.title.replace(/[^\w\s]/gi, '')}.pdf`);
-      
+
       toast({
         title: "Exportação concluída",
         description: "Arquivo PDF gerado com sucesso",
@@ -399,19 +403,19 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       });
     }
   };
-  
+
   // Export note to DOCX
   const exportNoteToDocx = async (noteId: string) => {
     const note = notes.find(note => note.id === noteId);
     if (!note) return;
-    
+
     try {
       // Use html-to-docx to convert HTML to DOCX
       const HTMLtoDOCX = (await import('html-to-docx')).default;
-      
+
       // Create file content
       const content = `<h1>${note.title}</h1>${note.content_html}`;
-      
+
       // Convert to DOCX
       const docxBlob = await HTMLtoDOCX(content, null, {
         title: note.title,
@@ -422,7 +426,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           left: 1440,
         },
       });
-      
+
       // Create download link
       const url = URL.createObjectURL(docxBlob);
       const link = document.createElement('a');
@@ -432,7 +436,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       toast({
         title: "Exportação concluída",
         description: "Arquivo DOCX gerado com sucesso",
@@ -461,19 +465,19 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Create a temporary div to parse the HTML
     const temp = document.createElement('div');
     temp.innerHTML = html;
-    
+
     // Try to find a heading, otherwise use the first line
     const heading = temp.querySelector('h1, h2, h3, h4, h5, h6');
     if (heading && heading.textContent) {
       return heading.textContent.trim();
     }
-    
+
     // Fall back to first paragraph or any text content
     const firstParagraph = temp.querySelector('p');
     if (firstParagraph && firstParagraph.textContent) {
       return firstParagraph.textContent.trim().substring(0, 30) + (firstParagraph.textContent.length > 30 ? '...' : '');
     }
-    
+
     // Last resort: use any text content
     return temp.textContent ? temp.textContent.trim().substring(0, 30) + (temp.textContent.length > 30 ? '...' : '') : 'Untitled Note';
   };
@@ -484,7 +488,7 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       // Pinned notes come first
       if (a.is_pinned && !b.is_pinned) return -1;
       if (!a.is_pinned && b.is_pinned) return 1;
-      
+
       // Then sort by updated_at (most recent first)
       return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
     });
