@@ -211,19 +211,24 @@ export default function AppLayout() {
     const handleCommentSpanClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target.hasAttribute('data-comment-id')) {
-        const commentId = target.getAttribute('data-comment-id');
+        const spanId = target.getAttribute('data-comment-id');
         const selectedText = target.textContent || '';
-        if (commentId) {
-          setShowCommentModal(true);
-          setSelectedTextInfo({ text: selectedText, spanId: commentId });
-          setEditingCommentId(commentId);
+        if (spanId && activeNote) {
+          // Find the comment that matches this span ID
+          const comment = activeNote.comments.find(c => c.target_span_id === spanId);
+          if (comment) {
+            handleEditComment(comment.id);
+            setShowCommentModal(true);
+            setSelectedTextInfo({ text: selectedText, spanId });
+            setEditingCommentId(comment.id);
+          }
         }
       }
     };
 
     document.addEventListener('click', handleCommentSpanClick);
     return () => document.removeEventListener('click', handleCommentSpanClick);
-  }, []);
+  }, [activeNote, handleEditComment]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-black text-gray-200">
